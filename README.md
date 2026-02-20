@@ -1,6 +1,6 @@
-# BaigMed Prescription Panel (React)
+# BaigMed
 
-This is a React + Vite implementation of a ZilSoft-style prescription screen.
+Professional dental clinic management – prescription panel, patient records, and treatment planning (React + Vite).
 
 ## Setup
 
@@ -9,12 +9,25 @@ npm install
 npm run dev
 ```
 
-Then open the URL printed by Vite (by default `http://localhost:5173`).
+Open the URL from Vite (e.g. `http://localhost:5173`).
 
 ## Features
 
-- Simple login screen (demo only)
-- Full prescription layout: patient details, O/E, Ix, history, drug list
-- Add/remove drug rows
-- Save prescriptions to `localStorage`
-- Print-friendly layout using the browser's print dialog
+- **Login** – Choose Prescription or Records panel (demo credentials)
+- **Prescription** – Patient details, O/E, Ix, drug list, save & print
+- **Records** – Patient list (table with View/Edit/Delete), appointments, inventory
+- **Patient profile** – Tooth selection (permanent/deciduous), medical history, treatment plans
+- **Tooth chart** – Select teeth by quadrant; Full Mouth / Multi Teeth
+
+## Deploy on Vercel
+
+1. Push this repo to GitHub: [Taibur-Rahaman/BaigMed](https://github.com/Taibur-Rahaman/BaigMed)
+2. In [Vercel](https://vercel.com), **Add New Project** → Import **Taibur-Rahaman/BaigMed**
+3. Leave build settings as default (Vite is auto-detected)
+4. Deploy
+
+The repo includes `vercel.json` for SPA routing.
+
+## License
+
+MIT
