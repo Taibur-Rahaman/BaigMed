@@ -2282,7 +2282,6 @@ body {
   background: var(--bg-main);
   border-radius: 10px;
   border: 2px dashed var(--border-color);
-} background: #f0fdfa;
 }
 
 .records-table-btn-delete {
