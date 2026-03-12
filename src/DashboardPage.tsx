@@ -10,6 +10,8 @@ interface Patient {
   email?: string;
   address?: string;
   bloodGroup?: string;
+  occupation?: string;
+  refBy?: string;
   createdAt: number;
 }
 
@@ -179,6 +181,30 @@ const DENTAL_PROCEDURES = [
   'X-Ray (IOPA)', 'X-Ray (OPG)', 'Fluoride Treatment', 'Sealant Application',
 ];
 
+const TOOTH_CHART_FDI = {
+  permanent: [
+    { quadrant: 'Upper Right', numbers: [18, 17, 16, 15, 14, 13, 12, 11] },
+    { quadrant: 'Upper Left', numbers: [21, 22, 23, 24, 25, 26, 27, 28] },
+    { quadrant: 'Lower Right', numbers: [48, 47, 46, 45, 44, 43, 42, 41] },
+    { quadrant: 'Lower Left', numbers: [31, 32, 33, 34, 35, 36, 37, 38] },
+  ],
+  deciduous: [
+    { quadrant: 'Upper Right', numbers: [55, 54, 53, 52, 51] },
+    { quadrant: 'Upper Left', numbers: [61, 62, 63, 64, 65] },
+    { quadrant: 'Lower Right', numbers: [85, 84, 83, 82, 81] },
+    { quadrant: 'Lower Left', numbers: [71, 72, 73, 74, 75] },
+  ],
+};
+
+const TOOTH_CHART_UNIVERSAL = {
+  permanent: [
+    { quadrant: 'Upper Right', numbers: [1, 2, 3, 4, 5, 6, 7, 8] },
+    { quadrant: 'Upper Left', numbers: [9, 10, 11, 12, 13, 14, 15, 16] },
+    { quadrant: 'Lower Right', numbers: [32, 31, 30, 29, 28, 27, 26, 25] },
+    { quadrant: 'Lower Left', numbers: [24, 23, 22, 21, 20, 19, 18, 17] },
+  ],
+};
+
 const TOOTH_CHART = {
   permanent: [
     { quadrant: 'Upper Right', numbers: [18, 17, 16, 15, 14, 13, 12, 11] },
@@ -209,7 +235,7 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
   const [showNotice, setShowNotice] = useState<string | null>(null);
   
   // Form states
-  const [patientForm, setPatientForm] = useState({ name: '', phone: '', age: '', gender: '', email: '', address: '', bloodGroup: '' });
+  const [patientForm, setPatientForm] = useState({ name: '', phone: '', age: '', gender: '', email: '', address: '', bloodGroup: '', occupation: '', refBy: '' });
   const [appointmentForm, setAppointmentForm] = useState({ patientId: '', date: '', time: '', type: 'Checkup' });
   const [prescriptionForm, setPrescriptionForm] = useState({ patientId: '', diagnosis: '', advice: '', drugs: [] as DrugItem[] });
   const [invoiceForm, setInvoiceForm] = useState({ patientId: '', items: [] as { description: string; amount: number }[], discount: 0 });
@@ -224,6 +250,11 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
 
   // Patient profile states
   const [patientProfileTab, setPatientProfileTab] = useState<'info' | 'treatment' | 'ledger' | 'consent'>('info');
+  const [toothNumberingSystem, setToothNumberingSystem] = useState<'fdi' | 'universal'>('fdi');
+  const [chiefComplaint, setChiefComplaint] = useState('');
+  const [clinicalFindings, setClinicalFindings] = useState('');
+  const [investigation, setInvestigation] = useState('');
+  const [diagnosis, setDiagnosis] = useState('');
   const [medicalHistory, setMedicalHistory] = useState<MedicalHistory>({});
   const [treatmentPlans, setTreatmentPlans] = useState<TreatmentPlan[]>([]);
   const [treatmentRecords, setTreatmentRecords] = useState<TreatmentRecord[]>([]);
@@ -387,10 +418,12 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
       email: patientForm.email,
       address: patientForm.address,
       bloodGroup: patientForm.bloodGroup,
+      occupation: patientForm.occupation,
+      refBy: patientForm.refBy,
       createdAt: Date.now(),
     };
     savePatients([newPatient, ...patients]);
-    setPatientForm({ name: '', phone: '', age: '', gender: '', email: '', address: '', bloodGroup: '' });
+    setPatientForm({ name: '', phone: '', age: '', gender: '', email: '', address: '', bloodGroup: '', occupation: '', refBy: '' });
     showToast('Patient added successfully');
   };
 
@@ -798,6 +831,14 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 <option value="O-">O-</option>
               </select>
             </div>
+            <div className="form-group">
+              <label>Occupation</label>
+              <input type="text" value={patientForm.occupation} onChange={(e) => setPatientForm({ ...patientForm, occupation: e.target.value })} placeholder="Occupation" />
+            </div>
+            <div className="form-group">
+              <label>Ref. By</label>
+              <input type="text" value={patientForm.refBy} onChange={(e) => setPatientForm({ ...patientForm, refBy: e.target.value })} placeholder="Referred by" />
+            </div>
             <div className="form-group full-width">
               <label>Address</label>
               <textarea value={patientForm.address} onChange={(e) => setPatientForm({ ...patientForm, address: e.target.value })} placeholder="Address" />
@@ -1005,6 +1046,8 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 <div><strong>Age:</strong> {selectedPatient.age || '-'}</div>
                 <div><strong>Gender:</strong> {selectedPatient.gender || '-'}</div>
                 <div><strong>Blood Group:</strong> {selectedPatient.bloodGroup || '-'}</div>
+                <div><strong>Occupation:</strong> {selectedPatient.occupation || '-'}</div>
+                <div><strong>Ref. By:</strong> {selectedPatient.refBy || '-'}</div>
                 <div><strong>Address:</strong> {selectedPatient.address || '-'}</div>
               </div>
             </div>
@@ -1040,13 +1083,35 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
             </div>
 
             {/* Dental Chart Card */}
-            <div className="detail-card">
-              <h4><i className="fa-solid fa-tooth"></i> Dental Chart</h4>
+            <div className="detail-card dental-chart-card">
+              <div className="dental-chart-header">
+                <h4><i className="fa-solid fa-tooth"></i> Dental Chart</h4>
+                <div className="numbering-toggle">
+                  <button 
+                    className={`toggle-btn ${toothNumberingSystem === 'fdi' ? 'active' : ''}`}
+                    onClick={() => setToothNumberingSystem('fdi')}
+                  >
+                    FDI
+                  </button>
+                  <button 
+                    className={`toggle-btn ${toothNumberingSystem === 'universal' ? 'active' : ''}`}
+                    onClick={() => setToothNumberingSystem('universal')}
+                  >
+                    Universal (1-32)
+                  </button>
+                </div>
+              </div>
+              
+              {/* Visual Dental Chart Image */}
+              <div className="dental-chart-visual">
+                <img src="/dental-chart.png" alt="Dental Chart" className="dental-chart-image" />
+              </div>
+              
               <div className="dental-chart">
                 <div className="chart-section">
-                  <h5>Permanent Teeth</h5>
+                  <h5>{toothNumberingSystem === 'fdi' ? 'FDI Notation' : 'Universal Notation'} - Click to select teeth</h5>
                   <div className="teeth-grid">
-                    {TOOTH_CHART.permanent.map((row, idx) => (
+                    {(toothNumberingSystem === 'fdi' ? TOOTH_CHART_FDI : TOOTH_CHART_UNIVERSAL).permanent.map((row, idx) => (
                       <div key={idx} className="teeth-row">
                         {row.numbers.map(num => (
                           <button 
@@ -1063,8 +1128,52 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 </div>
               </div>
               {selectedTeeth.length > 0 && (
-                <p className="selected-teeth">Selected: {selectedTeeth.join(', ')}</p>
+                <div className="selected-teeth-section">
+                  <p className="selected-teeth"><strong>Selected Teeth:</strong> {selectedTeeth.join(', ')}</p>
+                  <button className="btn-secondary btn-sm" onClick={() => setSelectedTeeth([])}>
+                    <i className="fa-solid fa-times"></i> Clear Selection
+                  </button>
+                </div>
               )}
+            </div>
+
+            {/* Chief Complaint & Clinical Findings */}
+            <div className="detail-card clinical-notes-card">
+              <h4><i className="fa-solid fa-stethoscope"></i> Clinical Notes</h4>
+              <div className="clinical-notes-grid">
+                <div className="clinical-field">
+                  <label>Chief Complaint (C/C)</label>
+                  <textarea 
+                    placeholder="Enter patient's chief complaint..."
+                    value={chiefComplaint}
+                    onChange={(e) => setChiefComplaint(e.target.value)}
+                  />
+                </div>
+                <div className="clinical-field">
+                  <label>Clinical Findings (C/F)</label>
+                  <textarea 
+                    placeholder="Enter clinical findings..."
+                    value={clinicalFindings}
+                    onChange={(e) => setClinicalFindings(e.target.value)}
+                  />
+                </div>
+                <div className="clinical-field">
+                  <label>Investigation (I/X)</label>
+                  <textarea 
+                    placeholder="Enter investigation details..."
+                    value={investigation}
+                    onChange={(e) => setInvestigation(e.target.value)}
+                  />
+                </div>
+                <div className="clinical-field">
+                  <label>Diagnosis</label>
+                  <textarea 
+                    placeholder="Enter diagnosis..."
+                    value={diagnosis}
+                    onChange={(e) => setDiagnosis(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Treatment Cost Summary */}

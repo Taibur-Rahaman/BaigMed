@@ -8608,3 +8608,219 @@ body {
   }
 }
 
+/* ====================================
+   ENHANCED DENTAL CHART STYLES
+   ==================================== */
+
+/* Dental Chart Card */
+.dental-chart-card {
+  overflow: hidden;
+}
+
+.dental-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dental-chart-header h4 {
+  margin: 0;
+}
+
+/* Numbering Toggle */
+.numbering-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--neo-surface);
+  border: 1px solid var(--neo-border);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--neo-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: var(--neo-primary);
+  background: rgba(38, 198, 218, 0.05);
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, var(--neo-primary), var(--neo-accent));
+  color: white;
+  box-shadow: 0 2px 8px rgba(38, 198, 218, 0.3);
+}
+
+/* Visual Dental Chart Image */
+.dental-chart-visual {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+  border: 1px solid var(--neo-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.dental-chart-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Selected Teeth Section */
+.selected-teeth-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(38, 198, 218, 0.1), rgba(38, 198, 218, 0.03));
+  border: 1px solid rgba(38, 198, 218, 0.2);
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.selected-teeth-section .selected-teeth {
+  margin: 0;
+  color: var(--neo-text);
+  font-size: 0.9rem;
+}
+
+/* Clinical Notes Card */
+.clinical-notes-card {
+  background: linear-gradient(135deg, rgba(100, 181, 246, 0.05), rgba(100, 181, 246, 0.02)) !important;
+}
+
+.clinical-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.clinical-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.clinical-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--neo-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clinical-field textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  background: var(--neo-surface);
+  border: 1px solid var(--neo-border);
+  border-radius: 10px;
+  color: var(--neo-text);
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.clinical-field textarea:focus {
+  border-color: var(--neo-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(38, 198, 218, 0.1);
+}
+
+.clinical-field textarea::placeholder {
+  color: var(--neo-text-muted);
+}
+
+/* Enhanced Tooth Button */
+.tooth-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neo-surface);
+  border: 2px solid var(--neo-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--neo-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tooth-btn:hover {
+  border-color: var(--neo-primary);
+  color: var(--neo-primary);
+  transform: scale(1.05);
+}
+
+.tooth-btn.selected {
+  background: linear-gradient(135deg, var(--neo-primary), var(--neo-accent));
+  border-color: var(--neo-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(38, 198, 218, 0.4);
+}
+
+.teeth-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.teeth-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(38, 198, 218, 0.03);
+  border-radius: 12px;
+}
+
+.chart-section h5 {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--neo-text-secondary);
+  margin-bottom: 12px;
+}
+
+/* Responsive for Clinical Notes */
+@media (max-width: 768px) {
+  .clinical-notes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dental-chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .numbering-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .selected-teeth-section {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
