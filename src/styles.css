@@ -8202,21 +8202,25 @@ body {
   border-top: 2px solid var(--neo-border);
 }
 
-/* Ledger Table with colored rows */
+/* Ledger Table with colored rows - Pink, Yellow, Blue, Green pattern */
 .ledger-table .ledger-row-0 {
-  background: rgba(236, 64, 122, 0.08);
+  background: rgba(255, 182, 193, 0.35);
 }
 
 .ledger-table .ledger-row-1 {
-  background: rgba(255, 238, 88, 0.1);
+  background: rgba(255, 255, 150, 0.35);
 }
 
 .ledger-table .ledger-row-2 {
-  background: rgba(100, 181, 246, 0.1);
+  background: rgba(173, 216, 230, 0.35);
 }
 
 .ledger-table .ledger-row-3 {
-  background: rgba(129, 199, 132, 0.1);
+  background: rgba(144, 238, 144, 0.35);
+}
+
+.ledger-table .ledger-row:hover {
+  filter: brightness(0.95);
 }
 
 /* Status Badges */

@@ -64,8 +64,10 @@ interface LabOrder {
 }
 
 interface MedicalHistory {
+  // Diseases
   bloodPressure?: boolean;
   heartProblems?: boolean;
+  rheumaticFever?: boolean;
   diabetes?: boolean;
   pepticUlcer?: boolean;
   jaundice?: boolean;
@@ -77,22 +79,32 @@ interface MedicalHistory {
   hepatitis?: boolean;
   stroke?: boolean;
   bleedingDisorder?: boolean;
+  cardiac?: boolean;
   otherDiseases?: string;
+  // Pregnancy
   isPregnant?: boolean;
   isLactating?: boolean;
+  // Allergies
   allergyPenicillin?: boolean;
   allergySulphur?: boolean;
   allergyAspirin?: boolean;
   allergyLocalAnaesthesia?: boolean;
+  allergyFood?: boolean;
+  allergyDrug?: boolean;
   allergyOther?: string;
+  // Taking Drugs
   takingAspirinBloodThinner?: boolean;
   takingAntihypertensive?: boolean;
   takingInhaler?: boolean;
+  takingOCP?: boolean;
   takingOther?: string;
+  // Bad Habits
   habitSmoking?: boolean;
   habitBetelLeaf?: boolean;
   habitAlcohol?: boolean;
+  habitGutka?: boolean;
   habitOther?: string;
+  // Additional Details
   details?: string;
 }
 
@@ -145,14 +157,68 @@ const TREATMENT_RECORDS_KEY = (patientId: string) => `baigdentpro:treatmentRecor
 const CONSENT_KEY = (patientId: string) => `baigdentpro:consent:${patientId}`;
 
 const DIAGNOSIS_OPTIONS = [
-  'Examination', 'X-Ray/RVG', 'Calculus', 'Caries', 'Deep Caries',
-  'BDR/BDC/Fracture', 'Missing', 'Mobility', 'Mucosal Lesion'
+  'Examination', 'X-Ray/RVG', 'OPG', 'CBCT', 'Calculus', 'Gingivitis',
+  'Periodontitis', 'Caries', 'Deep Caries', 'Pulpitis', 'Periapical Abscess',
+  'BDR/BDC/Fracture', 'Crown Fracture', 'Root Fracture', 'Missing Tooth',
+  'Impacted Tooth', 'Mobility Grade I', 'Mobility Grade II', 'Mobility Grade III',
+  'Mucosal Lesion', 'Oral Ulcer', 'Leukoplakia', 'TMJ Disorder',
+  'Malocclusion', 'Spacing', 'Crowding', 'Crossbite', 'Overbite'
 ];
 
 const TREATMENT_OPTIONS = [
-  'Consultation', 'Scaling', 'Filling', 'Root Canal',
-  'Extraction/Surgical Ext', 'Partial/Complete Denture/Implant',
-  'Implant', 'Fixed Orthodontics'
+  'Consultation', 'Scaling', 'Scaling & Polishing', 'Deep Scaling (SRP)',
+  'Filling (Composite)', 'Filling (GIC)', 'Filling (Amalgam)', 'Temporary Filling',
+  'Root Canal Treatment', 'Re-RCT', 'Pulpotomy', 'Pulpectomy',
+  'Extraction', 'Surgical Extraction', 'Impaction Removal',
+  'Crown (PFM)', 'Crown (Zirconia)', 'Crown (All Ceramic)',
+  'Bridge', 'Veneer', 'Inlay/Onlay',
+  'Complete Denture', 'Partial Denture', 'Flexible Denture',
+  'Implant', 'Implant Crown', 'Sinus Lift',
+  'Fixed Orthodontics', 'Removable Orthodontics', 'Clear Aligners', 'Retainer',
+  'Teeth Whitening', 'Fluoride Application', 'Pit & Fissure Sealant',
+  'Splinting', 'Night Guard', 'Gum Surgery', 'Flap Surgery',
+  'Bone Grafting', 'Biopsy', 'I&D (Incision & Drainage)'
+];
+
+const MEDICAL_DISEASES = [
+  { key: 'bloodPressure', label: 'Blood Pressure (High/Low)' },
+  { key: 'heartProblems', label: 'Heart Problems (HTN/MI/Pacemaker/Ring)' },
+  { key: 'rheumaticFever', label: 'Rheumatic Fever' },
+  { key: 'diabetes', label: 'Diabetes' },
+  { key: 'pepticUlcer', label: 'Peptic Ulcer / Acidity' },
+  { key: 'jaundice', label: 'Jaundice / Liver Diseases' },
+  { key: 'asthma', label: 'Asthma' },
+  { key: 'tuberculosis', label: 'Tuberculosis (TB)' },
+  { key: 'kidneyDiseases', label: 'Kidney Diseases' },
+  { key: 'aids', label: 'AIDS / HIV' },
+  { key: 'thyroid', label: 'Thyroid' },
+  { key: 'hepatitis', label: 'Hepatitis' },
+  { key: 'stroke', label: 'Stroke' },
+  { key: 'bleedingDisorder', label: 'Bleeding Disorder' },
+  { key: 'cardiac', label: 'Cardiac Problem' },
+];
+
+const ALLERGY_OPTIONS = [
+  { key: 'allergyPenicillin', label: 'Penicillin' },
+  { key: 'allergySulphur', label: 'Sulphur' },
+  { key: 'allergyAspirin', label: 'Aspirin' },
+  { key: 'allergyLocalAnaesthesia', label: 'Local Anaesthesia' },
+  { key: 'allergyFood', label: 'Food Allergy' },
+  { key: 'allergyDrug', label: 'Drug Allergy' },
+];
+
+const TAKING_DRUGS = [
+  { key: 'takingAspirinBloodThinner', label: 'Aspirin / Blood Thinner' },
+  { key: 'takingAntihypertensive', label: 'Antihypertensive' },
+  { key: 'takingInhaler', label: 'Inhaler' },
+  { key: 'takingOCP', label: 'OCP (Oral Contraceptive)' },
+];
+
+const BAD_HABITS = [
+  { key: 'habitSmoking', label: 'Smoking' },
+  { key: 'habitBetelLeaf', label: 'Chewing Betel Leaf/Nut (Paan/Supari)' },
+  { key: 'habitAlcohol', label: 'Alcohol Intake' },
+  { key: 'habitGutka', label: 'Gutka / Tobacco' },
 ];
 
 const DRUG_DATABASE = [
@@ -1341,27 +1407,19 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
               </div>
               <form onSubmit={handleSaveMedicalHistory} className="medical-history-form">
                 <div className="history-section">
-                  <h4>Diseases Like</h4>
+                  <h4><i className="fa-solid fa-disease"></i> Diseases Like</h4>
                   <div className="checkbox-grid">
-                    <label><input type="checkbox" name="bloodPressure" defaultChecked={medicalHistory.bloodPressure} /> Blood Pressure (High/Low)</label>
-                    <label><input type="checkbox" name="heartProblems" defaultChecked={medicalHistory.heartProblems} /> Heart Problems</label>
-                    <label><input type="checkbox" name="diabetes" defaultChecked={medicalHistory.diabetes} /> Diabetes</label>
-                    <label><input type="checkbox" name="pepticUlcer" defaultChecked={medicalHistory.pepticUlcer} /> Peptic Ulcer / Acidity</label>
-                    <label><input type="checkbox" name="jaundice" defaultChecked={medicalHistory.jaundice} /> Jaundice/Liver Diseases</label>
-                    <label><input type="checkbox" name="asthma" defaultChecked={medicalHistory.asthma} /> Asthma</label>
-                    <label><input type="checkbox" name="tuberculosis" defaultChecked={medicalHistory.tuberculosis} /> Tuberculosis</label>
-                    <label><input type="checkbox" name="kidneyDiseases" defaultChecked={medicalHistory.kidneyDiseases} /> Kidney Diseases</label>
-                    <label><input type="checkbox" name="aids" defaultChecked={medicalHistory.aids} /> AIDS</label>
-                    <label><input type="checkbox" name="thyroid" defaultChecked={medicalHistory.thyroid} /> Thyroid</label>
-                    <label><input type="checkbox" name="hepatitis" defaultChecked={medicalHistory.hepatitis} /> Hepatitis</label>
-                    <label><input type="checkbox" name="stroke" defaultChecked={medicalHistory.stroke} /> Stroke</label>
-                    <label><input type="checkbox" name="bleedingDisorder" defaultChecked={medicalHistory.bleedingDisorder} /> Bleeding Disorder</label>
+                    {MEDICAL_DISEASES.map(d => (
+                      <label key={d.key}>
+                        <input type="checkbox" name={d.key} defaultChecked={(medicalHistory as any)[d.key]} /> {d.label}
+                      </label>
+                    ))}
                   </div>
-                  <input type="text" name="otherDiseases" placeholder="Other diseases..." defaultValue={medicalHistory.otherDiseases} />
+                  <input type="text" name="otherDiseases" placeholder="Other diseases (please specify)..." defaultValue={medicalHistory.otherDiseases} />
                 </div>
 
                 <div className="history-section">
-                  <h4>If Female</h4>
+                  <h4><i className="fa-solid fa-person-pregnant"></i> If Female</h4>
                   <div className="checkbox-grid">
                     <label><input type="checkbox" name="isPregnant" defaultChecked={medicalHistory.isPregnant} /> Pregnant</label>
                     <label><input type="checkbox" name="isLactating" defaultChecked={medicalHistory.isLactating} /> Lactating Mother</label>
@@ -1369,44 +1427,49 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 </div>
 
                 <div className="history-section">
-                  <h4>Allergic to</h4>
+                  <h4><i className="fa-solid fa-allergies"></i> Allergic to</h4>
                   <div className="checkbox-grid">
-                    <label><input type="checkbox" name="allergyPenicillin" defaultChecked={medicalHistory.allergyPenicillin} /> Penicillin</label>
-                    <label><input type="checkbox" name="allergySulphur" defaultChecked={medicalHistory.allergySulphur} /> Sulphur</label>
-                    <label><input type="checkbox" name="allergyAspirin" defaultChecked={medicalHistory.allergyAspirin} /> Aspirin</label>
-                    <label><input type="checkbox" name="allergyLocalAnaesthesia" defaultChecked={medicalHistory.allergyLocalAnaesthesia} /> Local Anaesthesia</label>
+                    {ALLERGY_OPTIONS.map(a => (
+                      <label key={a.key}>
+                        <input type="checkbox" name={a.key} defaultChecked={(medicalHistory as any)[a.key]} /> {a.label}
+                      </label>
+                    ))}
                   </div>
-                  <input type="text" name="allergyOther" placeholder="Other allergies..." defaultValue={medicalHistory.allergyOther} />
+                  <input type="text" name="allergyOther" placeholder="Other allergies (please specify)..." defaultValue={medicalHistory.allergyOther} />
                 </div>
 
                 <div className="history-section">
-                  <h4>Taking Drug</h4>
+                  <h4><i className="fa-solid fa-pills"></i> Taking Drug</h4>
                   <div className="checkbox-grid">
-                    <label><input type="checkbox" name="takingAspirinBloodThinner" defaultChecked={medicalHistory.takingAspirinBloodThinner} /> Aspirin/Blood Thinner</label>
-                    <label><input type="checkbox" name="takingAntihypertensive" defaultChecked={medicalHistory.takingAntihypertensive} /> Antihypertensive</label>
-                    <label><input type="checkbox" name="takingInhaler" defaultChecked={medicalHistory.takingInhaler} /> Inhaler</label>
+                    {TAKING_DRUGS.map(d => (
+                      <label key={d.key}>
+                        <input type="checkbox" name={d.key} defaultChecked={(medicalHistory as any)[d.key]} /> {d.label}
+                      </label>
+                    ))}
                   </div>
-                  <input type="text" name="takingOther" placeholder="Other drugs..." defaultValue={medicalHistory.takingOther} />
+                  <input type="text" name="takingOther" placeholder="Other drugs (please specify)..." defaultValue={medicalHistory.takingOther} />
                 </div>
 
                 <div className="history-section">
-                  <h4>Bad Habits Like</h4>
+                  <h4><i className="fa-solid fa-smoking"></i> Personal History / Bad Habits</h4>
                   <div className="checkbox-grid">
-                    <label><input type="checkbox" name="habitSmoking" defaultChecked={medicalHistory.habitSmoking} /> Smoking</label>
-                    <label><input type="checkbox" name="habitBetelLeaf" defaultChecked={medicalHistory.habitBetelLeaf} /> Chewing Betel Leaf/Nut</label>
-                    <label><input type="checkbox" name="habitAlcohol" defaultChecked={medicalHistory.habitAlcohol} /> Alcohol</label>
+                    {BAD_HABITS.map(h => (
+                      <label key={h.key}>
+                        <input type="checkbox" name={h.key} defaultChecked={(medicalHistory as any)[h.key]} /> {h.label}
+                      </label>
+                    ))}
                   </div>
-                  <input type="text" name="habitOther" placeholder="Other habits..." defaultValue={medicalHistory.habitOther} />
+                  <input type="text" name="habitOther" placeholder="Other habits (please specify)..." defaultValue={medicalHistory.habitOther} />
                 </div>
 
                 <div className="history-section">
-                  <h4>Additional Details</h4>
-                  <textarea name="details" placeholder="Any additional details..." defaultValue={medicalHistory.details}></textarea>
+                  <h4><i className="fa-solid fa-file-medical"></i> Additional Details</h4>
+                  <textarea name="details" placeholder="Any additional medical history details..." defaultValue={medicalHistory.details}></textarea>
                 </div>
 
                 <div className="modal-actions">
                   <button type="button" className="btn-secondary" onClick={() => setShowMedicalHistoryModal(false)}>Cancel</button>
-                  <button type="submit" className="btn-primary">Save Medical History</button>
+                  <button type="submit" className="btn-primary"><i className="fa-solid fa-save"></i> Save Medical History</button>
                 </div>
               </form>
             </div>
@@ -1539,10 +1602,14 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
               </div>
               <form onSubmit={handleSaveConsent} className="consent-form">
                 <div className="consent-text-box">
+                  <p><strong>Treatment Plan Consent:</strong></p>
+                  <p>I accept the plan of dental treatment, risk factors and treatment cost for myself / my children.</p>
+                  <br />
+                  <p><strong>Treatment Consent:</strong></p>
                   <p>I, <strong>{selectedPatient.name}</strong>, do hereby agree to undergo necessary treatment of myself/my dependent. The procedure & the potential complications (if any) were explained to me.</p>
                 </div>
                 <div className="form-group">
-                  <label>Signature Name</label>
+                  <label>Signature of Patient / Attendant</label>
                   <input type="text" name="signatureName" placeholder="Full name" defaultValue={consent?.signatureName || selectedPatient.name} required />
                 </div>
                 <div className="form-group">
@@ -1551,7 +1618,7 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 </div>
                 <div className="modal-actions">
                   <button type="button" className="btn-secondary" onClick={() => setShowConsentModal(false)}>Cancel</button>
-                  <button type="submit" className="btn-primary">Save Consent</button>
+                  <button type="submit" className="btn-primary"><i className="fa-solid fa-check"></i> I Agree & Sign</button>
                 </div>
               </form>
             </div>
