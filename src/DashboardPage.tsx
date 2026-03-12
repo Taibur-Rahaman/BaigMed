@@ -371,44 +371,44 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
         </div>
         <div className="sidebar-user">
           <i className="fa-solid fa-user-circle"></i>
-          <span>{userName}</span>
+          <span>Dr. {userName}</span>
         </div>
       </div>
       <nav className="sidebar-nav">
         <button className={`sidebar-item ${activeNav === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveNav('dashboard')}>
-          <i className="fa-solid fa-chart-pie"></i> Dashboard
+          <i className="fa-solid fa-grid-2"></i> <span>Dashboard</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'patients' ? 'active' : ''}`} onClick={() => setActiveNav('patients')}>
-          <i className="fa-solid fa-users"></i> Patients
+          <i className="fa-solid fa-user-group"></i> <span>Patients</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'prescription' ? 'active' : ''}`} onClick={() => setActiveNav('prescription')}>
-          <i className="fa-solid fa-prescription"></i> New Prescription
+          <i className="fa-solid fa-prescription"></i> <span>New Prescription</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'prescriptions-list' ? 'active' : ''}`} onClick={() => setActiveNav('prescriptions-list')}>
-          <i className="fa-solid fa-file-medical"></i> All Prescriptions
+          <i className="fa-solid fa-file-waveform"></i> <span>All Prescriptions</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'appointments' ? 'active' : ''}`} onClick={() => setActiveNav('appointments')}>
-          <i className="fa-solid fa-calendar-check"></i> Appointments
+          <i className="fa-solid fa-calendar-check"></i> <span>Appointments</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'billing' ? 'active' : ''}`} onClick={() => setActiveNav('billing')}>
-          <i className="fa-solid fa-file-invoice-dollar"></i> Billing
+          <i className="fa-solid fa-credit-card"></i> <span>Billing</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'lab' ? 'active' : ''}`} onClick={() => setActiveNav('lab')}>
-          <i className="fa-solid fa-flask"></i> Lab Orders
+          <i className="fa-solid fa-flask-vial"></i> <span>Lab Orders</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'drugs' ? 'active' : ''}`} onClick={() => setActiveNav('drugs')}>
-          <i className="fa-solid fa-pills"></i> Drug Database
+          <i className="fa-solid fa-capsules"></i> <span>Drug Database</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'sms' ? 'active' : ''}`} onClick={() => setActiveNav('sms')}>
-          <i className="fa-solid fa-comment-sms"></i> SMS & Messages
+          <i className="fa-solid fa-message"></i> <span>SMS & Messages</span>
         </button>
         <button className={`sidebar-item ${activeNav === 'settings' ? 'active' : ''}`} onClick={() => setActiveNav('settings')}>
-          <i className="fa-solid fa-cog"></i> Settings
+          <i className="fa-solid fa-gear"></i> <span>Settings</span>
         </button>
       </nav>
       <div className="sidebar-footer">
         <button className="sidebar-logout" onClick={onLogout}>
-          <i className="fa-solid fa-sign-out-alt"></i> Logout
+          <i className="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span>
         </button>
       </div>
     </aside>
@@ -417,13 +417,21 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
   const renderDashboard = () => (
     <div className="dashboard-content">
       <div className="page-header">
-        <h1><i className="fa-solid fa-chart-pie"></i> Dashboard</h1>
-        <p>Welcome back, {userName}! Here's your clinic overview.</p>
+        <div>
+          <h1><i className="fa-solid fa-grid-2"></i> Command Center</h1>
+          <p>Welcome back, <span className="highlight">Dr. {userName}</span> — Here's your clinic overview for today.</p>
+        </div>
+        <div className="header-actions">
+          <span style={{ color: 'var(--neo-text-muted)', fontSize: '0.9rem' }}>
+            <i className="fa-solid fa-clock" style={{ marginRight: 8, color: 'var(--neo-primary)' }}></i>
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </span>
+        </div>
       </div>
       
       <div className="stats-grid">
         <div className="stat-card stat-primary">
-          <div className="stat-icon"><i className="fa-solid fa-users"></i></div>
+          <div className="stat-icon"><i className="fa-solid fa-user-group"></i></div>
           <div className="stat-info">
             <span className="stat-value">{stats.totalPatients}</span>
             <span className="stat-label">Total Patients</span>
@@ -437,28 +445,28 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
           </div>
         </div>
         <div className="stat-card stat-info">
-          <div className="stat-icon"><i className="fa-solid fa-prescription"></i></div>
+          <div className="stat-icon"><i className="fa-solid fa-file-waveform"></i></div>
           <div className="stat-info">
             <span className="stat-value">{stats.totalPrescriptions}</span>
             <span className="stat-label">Prescriptions</span>
           </div>
         </div>
         <div className="stat-card stat-warning">
-          <div className="stat-icon"><i className="fa-solid fa-file-invoice-dollar"></i></div>
+          <div className="stat-icon"><i className="fa-solid fa-receipt"></i></div>
           <div className="stat-info">
             <span className="stat-value">{stats.pendingInvoices}</span>
             <span className="stat-label">Pending Invoices</span>
           </div>
         </div>
         <div className="stat-card stat-danger">
-          <div className="stat-icon"><i className="fa-solid fa-flask"></i></div>
+          <div className="stat-icon"><i className="fa-solid fa-flask-vial"></i></div>
           <div className="stat-info">
             <span className="stat-value">{stats.pendingLab}</span>
             <span className="stat-label">Pending Lab Work</span>
           </div>
         </div>
         <div className="stat-card stat-revenue">
-          <div className="stat-icon"><i className="fa-solid fa-coins"></i></div>
+          <div className="stat-icon"><i className="fa-solid fa-sack-dollar"></i></div>
           <div className="stat-info">
             <span className="stat-value">৳{stats.monthlyRevenue.toLocaleString()}</span>
             <span className="stat-label">Total Revenue</span>
@@ -474,7 +482,9 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
           </div>
           <div className="card-body">
             {todayAppointments.length === 0 ? (
-              <p className="empty-state">No appointments today</p>
+              <div className="empty-state">
+                <p style={{ position: 'relative', zIndex: 1 }}>No appointments scheduled for today</p>
+              </div>
             ) : (
               <div className="appointment-list">
                 {todayAppointments.slice(0, 5).map(apt => (
@@ -499,12 +509,14 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
           </div>
           <div className="card-body">
             {patients.length === 0 ? (
-              <p className="empty-state">No patients yet</p>
+              <div className="empty-state">
+                <p style={{ position: 'relative', zIndex: 1 }}>No patients registered yet</p>
+              </div>
             ) : (
               <div className="patient-list-mini">
                 {patients.slice(0, 5).map(p => (
                   <div key={p.id} className="patient-item-mini" onClick={() => selectPatientForView(p)}>
-                    <div className="patient-avatar">{p.name.charAt(0)}</div>
+                    <div className="patient-avatar">{p.name.charAt(0).toUpperCase()}</div>
                     <div className="patient-info-mini">
                       <strong>{p.name}</strong>
                       <span>{p.phone}</span>
@@ -518,18 +530,20 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
 
         <div className="dashboard-card">
           <div className="card-header">
-            <h3><i className="fa-solid fa-flask"></i> Pending Lab Work</h3>
+            <h3><i className="fa-solid fa-flask-vial"></i> Pending Lab Work</h3>
             <button className="btn-sm" onClick={() => setActiveNav('lab')}>View All</button>
           </div>
           <div className="card-body">
             {labOrders.filter(l => l.status !== 'DELIVERED').length === 0 ? (
-              <p className="empty-state">No pending lab work</p>
+              <div className="empty-state">
+                <p style={{ position: 'relative', zIndex: 1 }}>No pending lab orders</p>
+              </div>
             ) : (
               <div className="lab-list-mini">
                 {labOrders.filter(l => l.status !== 'DELIVERED').slice(0, 5).map(l => (
                   <div key={l.id} className="lab-item-mini">
                     <span className="lab-type">{l.workType}</span>
-                    <span>{l.patientName}</span>
+                    <span style={{ color: 'var(--neo-text-secondary)' }}>{l.patientName}</span>
                     <span className={`lab-status status-${l.status.toLowerCase()}`}>{l.status}</span>
                   </div>
                 ))}
@@ -540,7 +554,7 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
       </div>
 
       <div className="quick-actions">
-        <h3><i className="fa-solid fa-bolt"></i> Quick Actions</h3>
+        <h3><i className="fa-solid fa-bolt-lightning"></i> Quick Actions</h3>
         <div className="quick-actions-grid">
           <button className="quick-action-btn" onClick={() => setActiveNav('patients')}>
             <i className="fa-solid fa-user-plus"></i>
@@ -555,11 +569,11 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
             <span>Schedule Appointment</span>
           </button>
           <button className="quick-action-btn" onClick={() => setActiveNav('billing')}>
-            <i className="fa-solid fa-file-invoice"></i>
+            <i className="fa-solid fa-credit-card"></i>
             <span>Create Invoice</span>
           </button>
           <button className="quick-action-btn" onClick={() => setActiveNav('lab')}>
-            <i className="fa-solid fa-flask"></i>
+            <i className="fa-solid fa-flask-vial"></i>
             <span>Lab Order</span>
           </button>
           <button className="quick-action-btn" onClick={() => setActiveNav('sms')}>
