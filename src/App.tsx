@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { PrescriptionPage } from './PrescriptionPage';
-import { RecordsPage } from './RecordsPage';
+import { DashboardPage } from './DashboardPage';
 import { HomePage } from './HomePage';
 import api from './api';
 
-export type View = 'home' | 'login' | 'prescription' | 'records';
+export type View = 'home' | 'login' | 'dashboard';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
   const [userName, setUserName] = useState('');
-  const [loginMode, setLoginMode] = useState<'prescription' | 'records'>('prescription');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isRegister, setIsRegister] = useState(false);
@@ -45,11 +43,11 @@ export const App: React.FC = () => {
       const result = await api.auth.login(email, password);
       localStorage.setItem('baigdentpro:user', JSON.stringify(result.user));
       setUserName(result.user.name);
-      setView(loginMode);
+      setView('dashboard');
     } catch (err: any) {
       if (email && password) {
         setUserName(email.split('@')[0] || 'User');
-        setView(loginMode);
+        setView('dashboard');
       } else {
         setError(err.message || 'Login failed');
       }
@@ -67,7 +65,7 @@ export const App: React.FC = () => {
       const result = await api.auth.register(registerData);
       localStorage.setItem('baigdentpro:user', JSON.stringify(result.user));
       setUserName(result.user.name);
-      setView(loginMode);
+      setView('dashboard');
     } catch (err: any) {
       setError(err.message || 'Registration failed');
     } finally {
@@ -86,12 +84,8 @@ export const App: React.FC = () => {
     return <HomePage onLoginClick={() => setView('login')} />;
   }
 
-  if (view === 'prescription') {
-    return <PrescriptionPage onBackToLogin={handleLogout} userName={userName || undefined} />;
-  }
-
-  if (view === 'records') {
-    return <RecordsPage onBackToLogin={handleLogout} userName={userName || undefined} />;
+  if (view === 'dashboard') {
+    return <DashboardPage onLogout={handleLogout} userName={userName || undefined} />;
   }
 
   return (
@@ -102,10 +96,10 @@ export const App: React.FC = () => {
             <i className="fa-solid fa-tooth"></i>
             BaigDentPro
           </div>
-          <h1 className="hero-title">Professional Dental & Medical Management System</h1>
+          <h1 className="hero-title">All-in-One Dental Practice Management</h1>
           <p className="hero-subtitle">
-            Streamline your clinic with world-class dental practice management. 
-            Comprehensive solutions for modern healthcare professionals.
+            One powerful dashboard for everything. Prescriptions, patient records, 
+            appointments, billing, and lab orders — all in one place.
           </p>
           <div className="hero-features">
             <div className="hero-feature">
@@ -141,29 +135,18 @@ export const App: React.FC = () => {
           <div className="card login-card">
             <div className="card-header">
               <div className="card-title">{isRegister ? 'Create Account' : 'Welcome Back'}</div>
-              <div className="card-subtitle">{isRegister ? 'Register to get started' : 'Sign in to access your dashboard'}</div>
+              <div className="card-subtitle">{isRegister ? 'Register to get started' : 'Sign in to your unified dashboard'}</div>
             </div>
 
             {!isRegister && (
-              <div className="login-options">
-                <button
-                  type="button"
-                  className={`login-option ${loginMode === 'prescription' ? 'active' : ''}`}
-                  onClick={() => setLoginMode('prescription')}
-                >
-                  <span className="login-option-icon">💊</span>
-                  <span className="login-option-label">Prescription Panel</span>
-                  <span className="login-option-desc">OPD prescriptions, drugs & printing</span>
-                </button>
-                <button
-                  type="button"
-                  className={`login-option ${loginMode === 'records' ? 'active' : ''}`}
-                  onClick={() => setLoginMode('records')}
-                >
-                  <span className="login-option-icon">📋</span>
-                  <span className="login-option-label">Records Panel</span>
-                  <span className="login-option-desc">Patients, appointments & billing</span>
-                </button>
+              <div className="unified-panel-info">
+                <div className="panel-icon">
+                  <i className="fa-solid fa-chart-pie"></i>
+                </div>
+                <div className="panel-details">
+                  <h4>Unified Dashboard</h4>
+                  <p>Access all features in one place: Prescriptions, Patients, Appointments, Billing, Lab Orders & more</p>
+                </div>
               </div>
             )}
 
@@ -245,7 +228,7 @@ export const App: React.FC = () => {
                 </div>
                 <div className="actions-row">
                   <button type="submit" className="btn-primary" disabled={isLoading}>
-                    {isLoading ? <><i className="fa-solid fa-spinner fa-spin"></i> Signing In...</> : <><i className="fa-solid fa-sign-in-alt"></i> Sign In to {loginMode === 'prescription' ? 'Prescription' : 'Records'} Panel</>}
+                    {isLoading ? <><i className="fa-solid fa-spinner fa-spin"></i> Signing In...</> : <><i className="fa-solid fa-sign-in-alt"></i> Sign In to Dashboard</>}
                   </button>
                 </div>
                 <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '0.9rem' }}>
