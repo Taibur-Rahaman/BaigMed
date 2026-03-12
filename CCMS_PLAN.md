@@ -2,7 +2,7 @@
 
 This plan selects the strongest capabilities from leading tools (Dentrix, Open Dental, Dentrix Ascend, Curve Dental, Eaglesoft, Dental Suite and local systems) into one clear plan for **Cursor Clinic Management System (CCMS)**.
 
-**Implementation:** BaigMed is the codebase implementing CCMS.
+**Implementation:** BaigDentPro is the codebase implementing CCMS.
 
 ---
 

@@ -22,8 +22,8 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('baigmed:token');
-    const savedUser = localStorage.getItem('baigmed:user');
+    const token = localStorage.getItem('baigdentpro:token');
+    const savedUser = localStorage.getItem('baigdentpro:user');
     if (token && savedUser) {
       try {
         const user = JSON.parse(savedUser);
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
 
     try {
       const result = await api.auth.login(email, password);
-      localStorage.setItem('baigmed:user', JSON.stringify(result.user));
+      localStorage.setItem('baigdentpro:user', JSON.stringify(result.user));
       setUserName(result.user.name);
       setView(loginMode);
     } catch (err: any) {
@@ -65,7 +65,7 @@ export const App: React.FC = () => {
 
     try {
       const result = await api.auth.register(registerData);
-      localStorage.setItem('baigmed:user', JSON.stringify(result.user));
+      localStorage.setItem('baigdentpro:user', JSON.stringify(result.user));
       setUserName(result.user.name);
       setView(loginMode);
     } catch (err: any) {
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
 
   const handleLogout = () => {
     api.auth.logout();
-    localStorage.removeItem('baigmed:user');
+    localStorage.removeItem('baigdentpro:user');
     setUserName('');
     setView('home');
   };
@@ -100,7 +100,7 @@ export const App: React.FC = () => {
         <section className="hero-panel">
           <div className="hero-logo" onClick={() => setView('home')} style={{ cursor: 'pointer' }}>
             <i className="fa-solid fa-tooth"></i>
-            BaigMed
+            BaigDentPro
           </div>
           <h1 className="hero-title">Professional Dental & Medical Management System</h1>
           <p className="hero-subtitle">
@@ -249,7 +249,7 @@ export const App: React.FC = () => {
                   </button>
                 </div>
                 <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '0.9rem' }}>
-                  New to BaigMed?{' '}
+                  New to BaigDentPro?{' '}
                   <button type="button" className="link-btn" onClick={() => setIsRegister(true)}>
                     Create Account
                   </button>
@@ -258,8 +258,8 @@ export const App: React.FC = () => {
             )}
 
             <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              <p>Demo: demo@baigmed.com / password123</p>
-              <p style={{ marginTop: '8px' }}>© 2024 BaigMed • Omix Solutions</p>
+              <p>Demo: demo@baigdentpro.com / password123</p>
+              <p style={{ marginTop: '8px' }}>© 2024 BaigDentPro • Omix Solutions</p>
             </div>
           </div>
         </section>

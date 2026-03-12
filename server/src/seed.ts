@@ -8,16 +8,16 @@ async function main() {
 
   const hashedPassword = await bcrypt.hash('password123', 12);
   const demoUser = await prisma.user.upsert({
-    where: { email: 'demo@baigmed.com' },
+    where: { email: 'demo@baigdentpro.com' },
     update: {},
     create: {
-      email: 'demo@baigmed.com',
+      email: 'demo@baigdentpro.com',
       password: hashedPassword,
       name: 'Dr. Demo',
-      clinicName: 'BaigMed Dental Clinic',
+      clinicName: 'BaigDentPro Dental Clinic',
       clinicAddress: 'Dhaka, Bangladesh',
       clinicPhone: '+880 1617-180711',
-      clinicEmail: 'info@baigmed.com',
+      clinicEmail: 'info@baigdentpro.com',
       degree: 'BDS, MDS',
       specialization: 'General Dentistry',
     },
@@ -55,7 +55,7 @@ async function main() {
 
   console.log('🎉 Seeding completed!');
   console.log('\n📋 Demo Login:');
-  console.log('   Email: demo@baigmed.com');
+  console.log('   Email: demo@baigdentpro.com');
   console.log('   Password: password123');
 }
 

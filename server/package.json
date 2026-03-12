@@ -1,7 +1,7 @@
 {
-  "name": "baigmed-server",
+  "name": "baigdentpro-server",
   "version": "1.0.0",
-  "description": "BaigMed Dental Management System Backend",
+  "description": "BaigDentPro Dental Management System Backend",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

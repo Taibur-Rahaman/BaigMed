@@ -1,4 +1,4 @@
-# BaigMed
+# BaigDentPro
 
 Professional dental clinic management – prescription panel, patient records, and treatment planning (React + Vite).
 
@@ -21,8 +21,8 @@ Open the URL from Vite (e.g. `http://localhost:5173`).
 
 ## Deploy on Vercel
 
-1. Push this repo to GitHub: [Taibur-Rahaman/BaigMed](https://github.com/Taibur-Rahaman/BaigMed)
-2. In [Vercel](https://vercel.com), **Add New Project** → Import **Taibur-Rahaman/BaigMed**
+1. Push this repo to GitHub: [Taibur-Rahaman/BaigDentPro](https://github.com/Taibur-Rahaman/BaigDentPro)
+2. In [Vercel](https://vercel.com), **Add New Project** → Import **Taibur-Rahaman/BaigDentPro**
 3. Leave build settings as default (Vite is auto-detected)
 4. Deploy
 

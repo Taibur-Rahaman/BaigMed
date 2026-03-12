@@ -51,7 +51,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 app.listen(PORT, () => {
-  console.log(`🦷 BaigMed Server running on http://localhost:${PORT}`);
+  console.log(`🦷 BaigDentPro Server running on http://localhost:${PORT}`);
   console.log(`📊 API Health: http://localhost:${PORT}/api/health`);
 });
 

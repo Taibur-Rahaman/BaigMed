@@ -1,8 +1,8 @@
-# BaigMed Professional Dental Management - Feature Documentation
+# BaigDentPro Professional Dental Management - Feature Documentation
 
 ## 🎯 System Overview
 
-BaigMed is a comprehensive, professional-grade dental clinic management system designed for modern dental practices. It combines prescription management, patient records, appointment scheduling, billing, and advanced analytics in one unified platform.
+BaigDentPro is a comprehensive, professional-grade dental clinic management system designed for modern dental practices. It combines prescription management, patient records, appointment scheduling, billing, and advanced analytics in one unified platform.
 
 ## 👥 User Roles
 

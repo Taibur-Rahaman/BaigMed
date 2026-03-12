@@ -94,7 +94,7 @@ const ACCOUNT_DROPDOWN = [
   { label: 'Change Password', icon: 'fa-key', action: 'password' },
   { label: 'Clinic Settings', icon: 'fa-hospital', action: 'clinic' },
   { label: 'Watch Tutorial', icon: 'fa-video', action: 'tutorial' },
-  { label: 'About BaigMed', icon: 'fa-info-circle', action: 'about' },
+  { label: 'About BaigDentPro', icon: 'fa-info-circle', action: 'about' },
   { label: 'Log Out', icon: 'fa-sign-out-alt', action: 'logout' },
 ] as const;
 
@@ -230,10 +230,10 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
   const [headerSettings, setHeaderSettings] = useState({
     doctorName: 'Dr. Muhammad Ali',
     qualification: 'BDS, MDS',
-    clinicName: 'BaigMed Dental Care',
+    clinicName: 'BaigDentPro Dental Care',
     address: '123 Medical Center, Main Road',
     phone: '+880 1617-180711',
-    email: 'contact@baigmed.com',
+    email: 'contact@baigdentpro.com',
   });
 
   const computeBmi = useCallback(() => {
@@ -293,10 +293,10 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
       richText: richTextRef.current?.innerHTML ?? '',
       createdAt: Date.now(),
     };
-    const existingRaw = localStorage.getItem('baigmed:prescriptions');
+    const existingRaw = localStorage.getItem('baigdentpro:prescriptions');
     const list = existingRaw ? JSON.parse(existingRaw) : [];
     list.push(payload);
-    localStorage.setItem('baigmed:prescriptions', JSON.stringify(list));
+    localStorage.setItem('baigdentpro:prescriptions', JSON.stringify(list));
     setStatus('Saved');
     showNotice('Prescription saved successfully!');
   };
@@ -381,7 +381,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
     if (item.action === 'logout') {
       onBackToLogin();
     } else if (item.action === 'about') {
-      showNotice('BaigMed v2.0 - Professional Dental Management System by Omix Solutions');
+      showNotice('BaigDentPro v2.0 - Professional Dental Management System by Omix Solutions');
     } else {
       showNotice(`${item.label} - Settings opened!`);
     }
@@ -461,7 +461,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
 
   const savedList = (() => {
     try {
-      const raw = localStorage.getItem('baigmed:prescriptions');
+      const raw = localStorage.getItem('baigdentpro:prescriptions');
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -889,11 +889,11 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
             <strong>Appointment Reminder</strong>
-            <p style={{ margin: '8px 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Dear [Patient Name], Your appointment is scheduled for [Date] at [Time]. Please arrive 10 minutes early. - BaigMed</p>
+            <p style={{ margin: '8px 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Dear [Patient Name], Your appointment is scheduled for [Date] at [Time]. Please arrive 10 minutes early. - BaigDentPro</p>
           </div>
           <div style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
             <strong>Follow-up Reminder</strong>
-            <p style={{ margin: '8px 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Dear [Patient Name], Please remember your follow-up visit on [Date]. - BaigMed</p>
+            <p style={{ margin: '8px 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Dear [Patient Name], Please remember your follow-up visit on [Date]. - BaigDentPro</p>
           </div>
         </div>
       </div>
@@ -1039,13 +1039,13 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         <main className="prescription-shell" style={{ padding: 24 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h2><i className="fa-solid fa-list"></i> All Prescriptions</h2>
             <button type="button" className="btn-secondary" onClick={() => {
-              localStorage.removeItem('baigmed:prescriptions');
+              localStorage.removeItem('baigdentpro:prescriptions');
               showNotice('All prescriptions cleared!');
               window.location.reload();
             }}>
@@ -1107,7 +1107,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderDrugDatabase()}
       </div>
@@ -1127,7 +1127,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderAppointments()}
       </div>
@@ -1147,7 +1147,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderPayment()}
       </div>
@@ -1167,7 +1167,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderHeaderEdit()}
       </div>
@@ -1187,7 +1187,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderPageSetup()}
       </div>
@@ -1207,7 +1207,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderSms()}
       </div>
@@ -1227,7 +1227,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           <button type="button" className="btn-ghost" onClick={onBackToLogin}><i className="fa-solid fa-sign-out-alt"></i> Logout</button>
         </div>
         <header className="top-bar">
-          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+          <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         </header>
         {renderBuyCredit()}
       </div>
@@ -1257,7 +1257,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
         </button>
       </div>
       <header className="top-bar">
-        <div className="brand"><i className="fa-solid fa-tooth"></i> BaigMed</div>
+        <div className="brand"><i className="fa-solid fa-tooth"></i> BaigDentPro</div>
         <div className="action-buttons">
           <button type="button" className="btn-secondary action-btn-with-icon" onClick={handlePreview}>
             <span><i className="fa-solid fa-eye"></i></span> Preview
@@ -1618,7 +1618,7 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
           {/* Right column - templates */}
           <section className="prescription-right">
             <div className="cta-box">
-              <div><i className="fa-solid fa-headset"></i> BaigMed Support</div>
+              <div><i className="fa-solid fa-headset"></i> BaigDentPro Support</div>
               <div>Click here for help & support</div>
             </div>
             <div className="template-list">

@@ -11,9 +11,9 @@ class ApiClient {
   private sessionId: string;
 
   constructor() {
-    this.token = localStorage.getItem('baigmed:token');
-    this.sessionId = localStorage.getItem('baigmed:sessionId') || this.generateSessionId();
-    localStorage.setItem('baigmed:sessionId', this.sessionId);
+    this.token = localStorage.getItem('baigdentpro:token');
+    this.sessionId = localStorage.getItem('baigdentpro:sessionId') || this.generateSessionId();
+    localStorage.setItem('baigdentpro:sessionId', this.sessionId);
   }
 
   private generateSessionId(): string {
@@ -23,9 +23,9 @@ class ApiClient {
   setToken(token: string | null) {
     this.token = token;
     if (token) {
-      localStorage.setItem('baigmed:token', token);
+      localStorage.setItem('baigdentpro:token', token);
     } else {
-      localStorage.removeItem('baigmed:token');
+      localStorage.removeItem('baigdentpro:token');
     }
   }
 
@@ -88,7 +88,7 @@ class ApiClient {
 
     logout: () => {
       this.setToken(null);
-      localStorage.removeItem('baigmed:user');
+      localStorage.removeItem('baigdentpro:user');
     },
   };
 

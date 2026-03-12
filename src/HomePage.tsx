@@ -152,7 +152,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
         <div className="home-header-content">
           <div className="home-logo">
             <i className="fa-solid fa-tooth"></i>
-            <span>BaigMed</span>
+            <span>BaigDentPro</span>
           </div>
           <nav className="home-nav">
             <a href="#shop" className="nav-link">Shop</a>
@@ -293,7 +293,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
       </section>
 
       <section id="features" className="features-section">
-        <h2>Why Choose BaigMed?</h2>
+        <h2>Why Choose BaigDentPro?</h2>
         <div className="features-grid">
           <div className="feature-item">
             <i className="fa-solid fa-shield-check"></i>
@@ -320,19 +320,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
 
       <section id="contact" className="contact-section">
         <h2>Get Started Today</h2>
-        <p>Join hundreds of dental clinics using BaigMed</p>
+        <p>Join hundreds of dental clinics using BaigDentPro</p>
         <button className="btn-primary btn-lg" onClick={onLoginClick}>
           <i className="fa-solid fa-rocket"></i> Start Free Trial
         </button>
       </section>
 
       <footer className="home-footer">
-        <p>© 2024 BaigMed • Omix Solutions • All Rights Reserved</p>
+        <p>© 2024 BaigDentPro • Omix Solutions • All Rights Reserved</p>
         <div className="footer-links">
           <a href="https://wa.me/8801617180711" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-whatsapp"></i> WhatsApp
           </a>
-          <a href="mailto:info@baigmed.com">
+          <a href="mailto:info@baigdentpro.com">
             <i className="fa-solid fa-envelope"></i> Email
           </a>
         </div>

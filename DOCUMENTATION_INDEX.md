@@ -1,6 +1,6 @@
-# 📚 BaigMed Documentation Index
+# 📚 BaigDentPro Documentation Index
 
-Welcome to BaigMed Professional Dental Management System! This index will guide you through all available documentation.
+Welcome to BaigDentPro Professional Dental Management System! This index will guide you through all available documentation.
 
 ## 🎯 Quick Navigation
 
@@ -243,7 +243,7 @@ Welcome to BaigMed Professional Dental Management System! This index will guide 
 
 ## ❓ FAQ - Which Document Should I Read?
 
-**Q: I just want to know what BaigMed does**  
+**Q: I just want to know what BaigDentPro does**  
 A: Read [README_PROFESSIONAL.md](README_PROFESSIONAL.md)
 
 **Q: I want to see what's been improved**  

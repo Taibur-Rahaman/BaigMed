@@ -1,4 +1,4 @@
-# BaigMed - Dental Management System - Priority TODO
+# BaigDentPro - Dental Management System - Priority TODO
 
 ## ✅ COMPLETED FEATURES
 
@@ -42,7 +42,7 @@
 
 ```bash
 # Frontend
-cd /Users/eloneflax/BaigMed
+cd /Users/eloneflax/BaigDentPro
 npm install
 
 # Backend
@@ -79,7 +79,7 @@ cd server
 npm run dev
 
 # Terminal 2: Start Frontend
-cd /Users/eloneflax/BaigMed
+cd /Users/eloneflax/BaigDentPro
 npm run dev
 ```
 
@@ -89,7 +89,7 @@ npm run dev
 - **Backend API**: http://localhost:3001/api/health
 
 ### Demo Login
-- Email: demo@baigmed.com
+- Email: demo@baigdentpro.com
 - Password: password123
 
 ---
@@ -100,7 +100,7 @@ Create `server/.env`:
 
 ```env
 # Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/baigmed"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/baigdentpro"
 
 # JWT
 JWT_SECRET="your-secret-key-change-in-production"
@@ -184,7 +184,7 @@ WHATSAPP_API_TOKEN=""
 ## 📁 PROJECT STRUCTURE
 
 ```
-BaigMed/
+BaigDentPro/
 ├── src/                    # Frontend (React + Vite)
 │   ├── App.tsx            # Main app with routing
 │   ├── HomePage.tsx       # Landing page & shop

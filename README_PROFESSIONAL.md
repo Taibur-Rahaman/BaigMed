@@ -1,13 +1,13 @@
-# 🦷 BaigMed - Professional Dental Clinic Management System
+# 🦷 BaigDentPro - Professional Dental Clinic Management System
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yourusername/baigmed)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yourusername/baigdentpro)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 
 ## 📋 Overview
 
-BaigMed is a comprehensive, professional-grade dental clinic management system designed specifically for modern dental practices. It combines prescription writing, patient records management, appointment scheduling, billing, and advanced analytics in one unified platform.
+BaigDentPro is a comprehensive, professional-grade dental clinic management system designed specifically for modern dental practices. It combines prescription writing, patient records management, appointment scheduling, billing, and advanced analytics in one unified platform.
 
 ### Key Features
 
@@ -59,8 +59,8 @@ BaigMed is a comprehensive, professional-grade dental clinic management system d
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/baigmed.git
-cd baigmed
+git clone https://github.com/yourusername/baigdentpro.git
+cd baigdentpro
 
 # Install dependencies
 npm install
@@ -81,7 +81,7 @@ http://localhost:5173
 ## 📦 Project Structure
 
 ```
-baigmed/
+baigdentpro/
 ├── src/
 │   ├── App.tsx                      # Main application component
 │   ├── PrescriptionPage.tsx        # Prescription writing module
@@ -220,7 +220,7 @@ Complete patient and clinic management:
 
 ## 🔗 Backend Integration
 
-BaigMed is fully prepared for backend integration. See [BACKEND_INTEGRATION_GUIDE.md](BACKEND_INTEGRATION_GUIDE.md) for:
+BaigDentPro is fully prepared for backend integration. See [BACKEND_INTEGRATION_GUIDE.md](BACKEND_INTEGRATION_GUIDE.md) for:
 
 - Required database schema
 - API endpoint specifications
@@ -289,7 +289,7 @@ npm run preview  # Preview production build
 Create a `.env` file:
 ```env
 VITE_API_BASE_URL=https://api.yourdomain.com
-VITE_APP_NAME=BaigMed Dental Suite
+VITE_APP_NAME=BaigDentPro Dental Suite
 ```
 
 ## 🤝 Contributing
@@ -325,7 +325,7 @@ We welcome contributions! Please:
 
 ## 🐛 Bug Reports
 
-Found a bug? Please [create an issue](https://github.com/yourusername/baigmed/issues) with:
+Found a bug? Please [create an issue](https://github.com/yourusername/baigdentpro/issues) with:
 - Clear description
 - Steps to reproduce
 - Expected vs actual behavior
@@ -333,7 +333,7 @@ Found a bug? Please [create an issue](https://github.com/yourusername/baigmed/is
 
 ## 💡 Feature Requests
 
-Have a feature idea? [Submit a feature request](https://github.com/yourusername/baigmed/discussions) with:
+Have a feature idea? [Submit a feature request](https://github.com/yourusername/baigdentpro/discussions) with:
 - Use case description
 - Why it's needed
 - Suggested implementation
@@ -342,9 +342,9 @@ Have a feature idea? [Submit a feature request](https://github.com/yourusername/
 ## 📞 Support
 
 - **Documentation**: See [FEATURE_DOCUMENTATION.md](FEATURE_DOCUMENTATION.md)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/baigmed/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/baigmed/discussions)
-- **Email**: support@baigmed.com
+- **Issues**: [GitHub Issues](https://github.com/yourusername/baigdentpro/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/baigdentpro/discussions)
+- **Email**: support@baigdentpro.com
 
 ## 📄 License
 
@@ -352,7 +352,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💼 About
 
-BaigMed is developed by a team of healthcare IT professionals dedicated to making dental practice management easier, more efficient, and more professional.
+BaigDentPro is developed by a team of healthcare IT professionals dedicated to making dental practice management easier, more efficient, and more professional.
 
 ### Contributors
 - Healthcare IT Specialists
@@ -400,8 +400,8 @@ Planned:
 - 📖 [Full Documentation](FEATURE_DOCUMENTATION.md)
 - 🔧 [Backend Integration](BACKEND_INTEGRATION_GUIDE.md)
 - 📝 [Enhancement Summary](ENHANCEMENT_SUMMARY.md)
-- 🐛 [Report an Issue](https://github.com/yourusername/baigmed/issues)
-- 💬 [Discussion Forum](https://github.com/yourusername/baigmed/discussions)
+- 🐛 [Report an Issue](https://github.com/yourusername/baigdentpro/issues)
+- 💬 [Discussion Forum](https://github.com/yourusername/baigdentpro/discussions)
 
 ---
 

@@ -39,7 +39,7 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
   const transport = getTransporter();
 
   await transport.sendMail({
-    from: process.env.SMTP_FROM || `BaigMed <${process.env.SMTP_USER}>`,
+    from: process.env.SMTP_FROM || `BaigDentPro <${process.env.SMTP_USER}>`,
     to,
     subject,
     html,

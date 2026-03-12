@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import api from './api';
 
-const PATIENTS_STORAGE_KEY = 'baigmed:patients';
-const MEDICAL_HISTORY_KEY = (patientId: string) => `baigmed:medicalHistory:${patientId}`;
-const TREATMENT_PLANS_KEY = (patientId: string) => `baigmed:treatmentPlans:${patientId}`;
+const PATIENTS_STORAGE_KEY = 'baigdentpro:patients';
+const MEDICAL_HISTORY_KEY = (patientId: string) => `baigdentpro:medicalHistory:${patientId}`;
+const TREATMENT_PLANS_KEY = (patientId: string) => `baigdentpro:treatmentPlans:${patientId}`;
 
 export interface SavedPatient {
   id: string;
@@ -96,8 +96,8 @@ export interface PatientConsent {
   agreed: boolean;
 }
 
-const TREATMENT_RECORDS_KEY = (patientId: string) => `baigmed:treatmentRecords:${patientId}`;
-const CONSENT_KEY = (patientId: string) => `baigmed:consent:${patientId}`;
+const TREATMENT_RECORDS_KEY = (patientId: string) => `baigdentpro:treatmentRecords:${patientId}`;
+const CONSENT_KEY = (patientId: string) => `baigdentpro:consent:${patientId}`;
 
 const DIAGNOSIS_OPTIONS = [
   'Examination', 'X-Ray/RVG', 'Calculus', 'Caries', 'Deep Caries',
@@ -449,7 +449,7 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
   ];
 
   const notices = [
-    { badge: 'New', date: '15.01.2024', title: 'System Update v2.0', body: 'We have updated BaigMed with new features including improved drug database!' },
+    { badge: 'New', date: '15.01.2024', title: 'System Update v2.0', body: 'We have updated BaigDentPro with new features including improved drug database!' },
     { badge: 'Update', date: '10.01.2024', title: 'New SMS Templates', text: 'Check out our new SMS templates for appointment reminders.' },
   ];
 
@@ -653,7 +653,7 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
       <header className="records-header">
         <div className="records-header-inner">
           <button type="button" className="records-logo records-logo-btn" onClick={() => setRecordsView('home')}>
-            <span className="records-logo-text"><i className="fa-solid fa-tooth"></i> BaigMed</span>
+            <span className="records-logo-text"><i className="fa-solid fa-tooth"></i> BaigDentPro</span>
           </button>
           <nav className="records-nav">
             <button type="button" className={`records-nav-link ${recordsView === 'home' ? 'active' : ''}`} onClick={() => { setRecordsView('home'); setProfilePatient(null); }}>
@@ -671,7 +671,7 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
             <button type="button" className={`records-nav-link ${recordsView === 'shop' ? 'active' : ''}`} onClick={() => setRecordsView('shop')}>
               <i className="fa-solid fa-store"></i> Shop
             </button>
-            <a className="records-nav-link" href="https://baigmed.com/forum" target="_blank" rel="noopener noreferrer"><i className="fa-solid fa-comments"></i> Forum</a>
+            <a className="records-nav-link" href="https://baigdentpro.com/forum" target="_blank" rel="noopener noreferrer"><i className="fa-solid fa-comments"></i> Forum</a>
           </nav>
         </div>
       </header>
@@ -1352,14 +1352,14 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
           </div>
           <div className="records-info-box records-ad">
             <h6 className="records-section-title"><i className="fa-solid fa-ad"></i> Advertisement</h6>
-            <div className="records-carousel"><div className="records-ad-placeholder" style={{ padding: '30px 16px' }}><i className="fa-solid fa-tooth" style={{ fontSize: '2rem', marginBottom: '12px', color: 'var(--primary-color)' }}></i><div style={{ fontWeight: '600' }}>BaigMed</div><div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Omix Solutions</div></div></div>
+            <div className="records-carousel"><div className="records-ad-placeholder" style={{ padding: '30px 16px' }}><i className="fa-solid fa-tooth" style={{ fontSize: '2rem', marginBottom: '12px', color: 'var(--primary-color)' }}></i><div style={{ fontWeight: '600' }}>BaigDentPro</div><div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Omix Solutions</div></div></div>
           </div>
         </aside>
         </>
         )}
       </div>
 
-      <footer className="records-footer"><p>© 2024 <i className="fa-solid fa-tooth"></i> BaigMed • Professional Dental Management • Omix Solutions</p></footer>
+      <footer className="records-footer"><p>© 2024 <i className="fa-solid fa-tooth"></i> BaigDentPro • Professional Dental Management • Omix Solutions</p></footer>
 
       {showPatientModal && (
         <div className="records-modal-overlay" onClick={() => { setShowPatientModal(false); setEditingPatient(null); }}>

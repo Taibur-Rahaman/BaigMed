@@ -1,10 +1,10 @@
-# BaigMed - Backend Integration Guide
+# BaigDentPro - Backend Integration Guide
 
 ## System Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    BaigMed Frontend (React)                  │
+│                    BaigDentPro Frontend (React)                  │
 │  ┌────────────────────────────────────────────────────────┐  │
 │  │ Login Screen │ Prescription │ Records │ Analytics      │  │
 │  └────────────────────────────────────────────────────────┘  │
@@ -262,10 +262,10 @@ Create a `.env` file in the project root:
 ```env
 # Frontend
 VITE_API_BASE_URL=http://localhost:3000/api
-VITE_APP_NAME=BaigMed Dental Suite
+VITE_APP_NAME=BaigDentPro Dental Suite
 
 # Backend (for reference)
-DATABASE_URL=postgresql://user:password@localhost:5432/baigmed
+DATABASE_URL=postgresql://user:password@localhost:5432/baigdentpro
 JWT_SECRET=your-secret-key-here
 JWT_EXPIRY=24h
 
