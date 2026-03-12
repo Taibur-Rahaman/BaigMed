@@ -2615,3 +2615,359 @@ body {
   background: var(--text-muted);
 }
 
+/* ========================================
+   Patient Record Form - Real Form Features
+   ======================================== */
+
+/* Medical History Modal - Large Grid */
+.records-modal-lg {
+  max-width: 900px;
+}
+
+.medical-history-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .medical-history-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.medical-section {
+  background: var(--bg-main);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.medical-section-title {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.checkbox-label:last-of-type {
+  border-bottom: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* Medical History Tags */
+.history-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  color: var(--text-secondary);
+}
+
+.history-tag.allergy {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.history-tag.habit {
+  background: #fefce8;
+  border-color: #fde047;
+  color: #ca8a04;
+}
+
+.records-empty-sm {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 8px 0;
+}
+
+/* Cost Summary */
+.cost-summary {
+  padding: 12px;
+}
+
+.cost-summary p {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 0.9rem;
+}
+
+/* Profile Quick Actions */
+.profile-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+.profile-quick-actions .full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Profile Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  background: var(--bg-main);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.profile-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.profile-tab:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.profile-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Treatment Cost Table */
+.treatment-cost-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-card);
+}
+
+.treatment-cost-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.treatment-cost-table th,
+.treatment-cost-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.treatment-cost-table th {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.treatment-cost-table tbody tr:hover {
+  background: var(--bg-main);
+}
+
+.treatment-cost-table tfoot {
+  background: var(--bg-main);
+  font-weight: 600;
+}
+
+.treatment-cost-table tfoot td {
+  border-top: 2px solid var(--border-color);
+}
+
+/* Ledger Table - colored rows */
+.ledger-table tbody tr:nth-child(4n+1) { background: #fef7f0; }
+.ledger-table tbody tr:nth-child(4n+2) { background: #fefce8; }
+.ledger-table tbody tr:nth-child(4n+3) { background: #f0fdf4; }
+.ledger-table tbody tr:nth-child(4n+4) { background: #eff6ff; }
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.status-badge.not-start {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-badge.in-progress {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.completed {
+  background: #d1fae5;
+  color: #059669;
+}
+
+/* Icon Button */
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 2px;
+}
+
+.btn-icon:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-icon.danger:hover {
+  background: var(--danger-color);
+}
+
+/* Consent Display */
+.consent-display {
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.consent-signed {
+  text-align: center;
+}
+
+.consent-signed > p {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.consent-details {
+  text-align: left;
+  padding: 16px;
+  background: var(--bg-main);
+  border-radius: 8px;
+}
+
+.consent-details p {
+  margin: 8px 0;
+}
+
+.consent-text-display {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.consent-unsigned {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.consent-unsigned > p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Consent Modal Text */
+.consent-text {
+  padding: 20px;
+  background: var(--bg-main);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.consent-text p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* Text center utility */
+.text-center {
+  text-align: center;
+}
+
+/* Print Styles for Patient Record */
+@media print {
+  .records-header,
+  .records-sidebar,
+  .records-nav,
+  .profile-tabs,
+  .btn-primary,
+  .btn-ghost,
+  .btn-icon,
+  .treatment-plans-add,
+  .profile-quick-actions {
+    display: none !important;
+  }
+
+  .records-main,
+  .patient-profile-layout {
+    display: block !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .patient-profile-center,
+  .patient-profile-right,
+  .patient-profile-left {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .treatment-cost-table-wrap {
+    page-break-inside: avoid;
+  }
+
+  .treatment-plans-banner {
+    background: #333 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    background: white;
+    font-size: 12pt;
+  }
+}
+

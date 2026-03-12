@@ -7,6 +7,8 @@ const TREATMENT_PLANS_KEY = (patientId: string) => `baigmed:treatmentPlans:${pat
 export interface SavedPatient {
   id: string;
   patient_id?: string;
+  regNo?: string;
+  date?: string;
   mobile: string;
   mobile_type?: string;
   name: string;
@@ -16,31 +18,96 @@ export interface SavedPatient {
   occupation?: string;
   address?: string;
   email?: string;
+  tel?: string;
+  refBy?: string;
   image?: string;
   due?: string;
+  totalPaid?: string;
   createdAt: number;
 }
 
 export interface MedicalHistory {
-  bp?: string;
-  heartDisease?: string;
-  diabetic?: string;
-  hepatitis?: string;
-  bleedingDisorder?: string;
-  allergy?: string;
-  pregnantLactating?: string;
-  other?: string;
+  // Diseases
+  bloodPressure?: boolean;
+  heartProblems?: boolean;
+  diabetes?: boolean;
+  pepticUlcer?: boolean;
+  jaundice?: boolean;
+  asthma?: boolean;
+  tuberculosis?: boolean;
+  kidneyDiseases?: boolean;
+  aids?: boolean;
+  thyroid?: boolean;
+  hepatitis?: boolean;
+  stroke?: boolean;
+  bleedingDisorder?: boolean;
+  otherDiseases?: string;
+  // Pregnancy
+  isPregnant?: boolean;
+  isLactating?: boolean;
+  // Allergies
+  allergyPenicillin?: boolean;
+  allergySulphur?: boolean;
+  allergyAspirin?: boolean;
+  allergyLocalAnaesthesia?: boolean;
+  allergyOther?: string;
+  // Taking Drugs
+  takingAspirinBloodThinner?: boolean;
+  takingAntihypertensive?: boolean;
+  takingInhaler?: boolean;
+  takingOther?: string;
+  // Bad Habits
+  habitSmoking?: boolean;
+  habitBetelLeaf?: boolean;
+  habitAlcohol?: boolean;
+  habitOther?: string;
+  // Notes
+  details?: string;
 }
 
 export interface TreatmentPlan {
   id: string;
   toothNumber: string;
+  diagnosis: string;
   procedure: string;
+  cost: string;
   cc: string;
   cf: string;
   investigation: string;
   status: string;
 }
+
+export interface TreatmentRecord {
+  id: string;
+  date: string;
+  treatmentDone: string;
+  cost: string;
+  paid: string;
+  due: string;
+  doctorSignature?: string;
+}
+
+export interface PatientConsent {
+  patientId: string;
+  consentText: string;
+  signatureName: string;
+  signatureDate: string;
+  agreed: boolean;
+}
+
+const TREATMENT_RECORDS_KEY = (patientId: string) => `baigmed:treatmentRecords:${patientId}`;
+const CONSENT_KEY = (patientId: string) => `baigmed:consent:${patientId}`;
+
+const DIAGNOSIS_OPTIONS = [
+  'Examination', 'X-Ray/RVG', 'Calculus', 'Caries', 'Deep Caries',
+  'BDR/BDC/Fracture', 'Missing', 'Mobility', 'Mucosal Lesion'
+];
+
+const TREATMENT_OPTIONS = [
+  'Consultation', 'Scaling', 'Filling', 'Root Canal',
+  'Extraction/Surgical Ext', 'Partial/Complete Denture/Implant',
+  'Implant', 'Fixed Orthodontics'
+];
 
 const MOBILE_TYPE_LABELS: Record<string, string> = {
   '1': 'Self', '2': 'Father', '3': 'Mother', '8': 'Husband', '9': 'Wife', '10': 'Other',
@@ -113,6 +180,36 @@ function saveTreatmentPlans(patientId: string, plans: TreatmentPlan[]) {
   localStorage.setItem(TREATMENT_PLANS_KEY(patientId), JSON.stringify(plans));
 }
 
+function loadTreatmentRecords(patientId: string): TreatmentRecord[] {
+  try {
+    const raw = localStorage.getItem(TREATMENT_RECORDS_KEY(patientId));
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveTreatmentRecords(patientId: string, records: TreatmentRecord[]) {
+  localStorage.setItem(TREATMENT_RECORDS_KEY(patientId), JSON.stringify(records));
+}
+
+function loadConsent(patientId: string): PatientConsent | null {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY(patientId));
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveConsent(patientId: string, consent: PatientConsent) {
+  localStorage.setItem(CONSENT_KEY(patientId), JSON.stringify(consent));
+}
+
+function generateRegNo(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const count = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${y}-${m}-${count}`;
+}
+
 export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showPatientModal, setShowPatientModal] = useState(false);
@@ -130,6 +227,13 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
   const [editingPlan, setEditingPlan] = useState<TreatmentPlan | null>(null);
   const [medicalHistory, setMedicalHistory] = useState<MedicalHistory>({});
   const [treatmentPlans, setTreatmentPlans] = useState<TreatmentPlan[]>([]);
+  const [treatmentRecords, setTreatmentRecords] = useState<TreatmentRecord[]>([]);
+  const [consent, setConsent] = useState<PatientConsent | null>(null);
+  const [showTreatmentRecordModal, setShowTreatmentRecordModal] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<TreatmentRecord | null>(null);
+  const [showConsentModal, setShowConsentModal] = useState(false);
+  const [profileTab, setProfileTab] = useState<'info' | 'history' | 'treatment' | 'ledger' | 'consent'>('info');
+  const [showPrintView, setShowPrintView] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
   const chartQuadrants = toothType === 'permanent' ? PERMANENT_CHART : DECIDUOUS_CHART;
@@ -227,9 +331,36 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
     const form = e.currentTarget;
     const fd = new FormData(form);
     const data: MedicalHistory = {
-      bp: String(fd.get('bp') ?? ''), heartDisease: String(fd.get('heartDisease') ?? ''), diabetic: String(fd.get('diabetic') ?? ''),
-      hepatitis: String(fd.get('hepatitis') ?? ''), bleedingDisorder: String(fd.get('bleedingDisorder') ?? ''),
-      allergy: String(fd.get('allergy') ?? ''), pregnantLactating: String(fd.get('pregnantLactating') ?? ''), other: String(fd.get('other') ?? ''),
+      bloodPressure: fd.get('bloodPressure') === 'on',
+      heartProblems: fd.get('heartProblems') === 'on',
+      diabetes: fd.get('diabetes') === 'on',
+      pepticUlcer: fd.get('pepticUlcer') === 'on',
+      jaundice: fd.get('jaundice') === 'on',
+      asthma: fd.get('asthma') === 'on',
+      tuberculosis: fd.get('tuberculosis') === 'on',
+      kidneyDiseases: fd.get('kidneyDiseases') === 'on',
+      aids: fd.get('aids') === 'on',
+      thyroid: fd.get('thyroid') === 'on',
+      hepatitis: fd.get('hepatitis') === 'on',
+      stroke: fd.get('stroke') === 'on',
+      bleedingDisorder: fd.get('bleedingDisorder') === 'on',
+      otherDiseases: String(fd.get('otherDiseases') ?? ''),
+      isPregnant: fd.get('isPregnant') === 'on',
+      isLactating: fd.get('isLactating') === 'on',
+      allergyPenicillin: fd.get('allergyPenicillin') === 'on',
+      allergySulphur: fd.get('allergySulphur') === 'on',
+      allergyAspirin: fd.get('allergyAspirin') === 'on',
+      allergyLocalAnaesthesia: fd.get('allergyLocalAnaesthesia') === 'on',
+      allergyOther: String(fd.get('allergyOther') ?? ''),
+      takingAspirinBloodThinner: fd.get('takingAspirinBloodThinner') === 'on',
+      takingAntihypertensive: fd.get('takingAntihypertensive') === 'on',
+      takingInhaler: fd.get('takingInhaler') === 'on',
+      takingOther: String(fd.get('takingOther') ?? ''),
+      habitSmoking: fd.get('habitSmoking') === 'on',
+      habitBetelLeaf: fd.get('habitBetelLeaf') === 'on',
+      habitAlcohol: fd.get('habitAlcohol') === 'on',
+      habitOther: String(fd.get('habitOther') ?? ''),
+      details: String(fd.get('details') ?? ''),
     };
     setMedicalHistory(data);
     saveMedicalHistory(profilePatient.id, data);
@@ -244,9 +375,14 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
     const fd = new FormData(form);
     const plan: TreatmentPlan = {
       id: editingPlan?.id ?? crypto.randomUUID(),
-      toothNumber: String(fd.get('toothNumber') ?? ''), procedure: String(fd.get('procedure') ?? ''),
-      cc: String(fd.get('cc') ?? ''), cf: String(fd.get('cf') ?? ''),
-      investigation: String(fd.get('investigation') ?? ''), status: String(fd.get('status') ?? 'Not Start'),
+      toothNumber: String(fd.get('toothNumber') ?? ''),
+      diagnosis: String(fd.get('diagnosis') ?? ''),
+      procedure: String(fd.get('procedure') ?? ''),
+      cost: String(fd.get('cost') ?? '0'),
+      cc: String(fd.get('cc') ?? ''),
+      cf: String(fd.get('cf') ?? ''),
+      investigation: String(fd.get('investigation') ?? ''),
+      status: String(fd.get('status') ?? 'Not Start'),
     };
     setTreatmentPlans(prev => {
       const next = editingPlan ? prev.map(p => p.id === plan.id ? plan : p) : [...prev, plan];
@@ -261,6 +397,73 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
     if (!profilePatient) return;
     setTreatmentPlans(prev => { const next = prev.filter(p => p.id !== plan.id); saveTreatmentPlans(profilePatient.id, next); return next; });
     showNotice('Treatment plan deleted!');
+  };
+
+  const handleSaveTreatmentRecord = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!profilePatient) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const record: TreatmentRecord = {
+      id: editingRecord?.id ?? crypto.randomUUID(),
+      date: String(fd.get('date') ?? new Date().toISOString().split('T')[0]),
+      treatmentDone: String(fd.get('treatmentDone') ?? ''),
+      cost: String(fd.get('cost') ?? '0'),
+      paid: String(fd.get('paid') ?? '0'),
+      due: String(fd.get('due') ?? '0'),
+      doctorSignature: String(fd.get('doctorSignature') ?? ''),
+    };
+    setTreatmentRecords(prev => {
+      const next = editingRecord ? prev.map(r => r.id === record.id ? record : r) : [...prev, record];
+      saveTreatmentRecords(profilePatient.id, next);
+      return next;
+    });
+    setShowTreatmentRecordModal(false);
+    setEditingRecord(null);
+    showNotice(editingRecord ? 'Record updated!' : 'Record added!');
+  };
+
+  const handleDeleteTreatmentRecord = (record: TreatmentRecord) => {
+    if (!profilePatient) return;
+    setTreatmentRecords(prev => {
+      const next = prev.filter(r => r.id !== record.id);
+      saveTreatmentRecords(profilePatient.id, next);
+      return next;
+    });
+    showNotice('Record deleted!');
+  };
+
+  const handleSaveConsent = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!profilePatient) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const newConsent: PatientConsent = {
+      patientId: profilePatient.id,
+      consentText: 'I do hereby agree to undergo necessary treatment of myself/my dependent. The procedure & the potential complications (if any) were explained to me.',
+      signatureName: String(fd.get('signatureName') ?? ''),
+      signatureDate: String(fd.get('signatureDate') ?? new Date().toISOString().split('T')[0]),
+      agreed: true,
+    };
+    setConsent(newConsent);
+    saveConsent(profilePatient.id, newConsent);
+    setShowConsentModal(false);
+    showNotice('Consent saved!');
+  };
+
+  const calculateTotals = () => {
+    const totalCost = treatmentRecords.reduce((sum, r) => sum + parseFloat(r.cost || '0'), 0);
+    const totalPaid = treatmentRecords.reduce((sum, r) => sum + parseFloat(r.paid || '0'), 0);
+    const totalDue = totalCost - totalPaid;
+    return { totalCost, totalPaid, totalDue };
+  };
+
+  const printPatientRecord = () => {
+    setShowPrintView(true);
+    setTimeout(() => {
+      window.print();
+      setShowPrintView(false);
+    }, 100);
   };
 
   return (
@@ -374,28 +577,177 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
                 <div className="records-info-box">
                   <h6 className="records-section-title">Medical History</h6>
                   <div className="medical-history-list">
-                    <p><strong>BP:</strong> {medicalHistory.bp || '/'}</p>
-                    <p><strong>Heart Disease:</strong> {medicalHistory.heartDisease || '—'}</p>
-                    <p><strong>Diabetic:</strong> {medicalHistory.diabetic || '—'}</p>
-                    <p><strong>Hepatitis:</strong> {medicalHistory.hepatitis || '—'}</p>
-                    <p><strong>Bleeding Disorder:</strong> {medicalHistory.bleedingDisorder || '—'}</p>
-                    <p><strong>Allergy:</strong> {medicalHistory.allergy || '—'}</p>
-                    <p><strong>Pregnant/Lactating:</strong> {medicalHistory.pregnantLactating || '—'}</p>
-                    <p><strong>Other:</strong> {medicalHistory.other || '—'}</p>
+                    {medicalHistory.bloodPressure && <span className="history-tag">BP</span>}
+                    {medicalHistory.heartProblems && <span className="history-tag">Heart</span>}
+                    {medicalHistory.diabetes && <span className="history-tag">Diabetic</span>}
+                    {medicalHistory.asthma && <span className="history-tag">Asthma</span>}
+                    {medicalHistory.hepatitis && <span className="history-tag">Hepatitis</span>}
+                    {medicalHistory.bleedingDisorder && <span className="history-tag">Bleeding</span>}
+                    {medicalHistory.kidneyDiseases && <span className="history-tag">Kidney</span>}
+                    {medicalHistory.isPregnant && <span className="history-tag">Pregnant</span>}
+                    {medicalHistory.isLactating && <span className="history-tag">Lactating</span>}
+                    {medicalHistory.allergyPenicillin && <span className="history-tag allergy">Penicillin Allergy</span>}
+                    {medicalHistory.allergyLocalAnaesthesia && <span className="history-tag allergy">LA Allergy</span>}
+                    {medicalHistory.habitSmoking && <span className="history-tag habit">Smoking</span>}
+                    {medicalHistory.habitAlcohol && <span className="history-tag habit">Alcohol</span>}
+                    {medicalHistory.habitBetelLeaf && <span className="history-tag habit">Betel</span>}
+                    {!Object.values(medicalHistory).some(v => v) && <p className="records-empty-sm">No history recorded</p>}
                   </div>
                   <button type="button" className="btn-primary btn-sm" onClick={() => setShowMedicalHistoryModal(true)}><i className="fa-solid fa-edit"></i> Add/Edit</button>
                 </div>
                 <div className="records-info-box">
-                  <h6 className="records-section-title">Previous Prescription</h6>
-                  <p className="records-empty"><i className="fa-solid fa-prescription"></i> No Prescription Added Yet.</p>
+                  <h6 className="records-section-title">Treatment Cost</h6>
+                  <div className="cost-summary">
+                    <p><span>Total Cost:</span> <strong>{calculateTotals().totalCost.toLocaleString()} TK</strong></p>
+                    <p><span>Total Paid:</span> <strong className="text-success">{calculateTotals().totalPaid.toLocaleString()} TK</strong></p>
+                    <p><span>Total Due:</span> <strong className="text-danger">{calculateTotals().totalDue.toLocaleString()} TK</strong></p>
+                  </div>
                 </div>
                 <div className="records-info-box">
-                  <h6 className="records-section-title">Cost</h6>
-                  <p className="cost-estimate"><span className="cost-label">Estimated Cost:</span> <strong>0 TK</strong></p>
+                  <h6 className="records-section-title">Actions</h6>
+                  <div className="profile-quick-actions">
+                    <button type="button" className="btn-primary btn-sm full" onClick={() => { setEditingRecord(null); setShowTreatmentRecordModal(true); }}><i className="fa-solid fa-plus"></i> Add Payment</button>
+                    <button type="button" className="btn-primary btn-sm full" onClick={() => setShowConsentModal(true)}><i className="fa-solid fa-file-signature"></i> Consent Form</button>
+                    <button type="button" className="btn-primary btn-sm full" onClick={printPatientRecord}><i className="fa-solid fa-print"></i> Print Record</button>
+                  </div>
                 </div>
               </aside>
             </div>
             <section className="treatment-plans-section">
+              <div className="profile-tabs">
+                <button type="button" className={`profile-tab ${profileTab === 'treatment' || profileTab === 'info' ? 'active' : ''}`} onClick={() => setProfileTab('treatment')}>Treatment Plan & Cost</button>
+                <button type="button" className={`profile-tab ${profileTab === 'ledger' ? 'active' : ''}`} onClick={() => setProfileTab('ledger')}>Payment Ledger</button>
+                <button type="button" className={`profile-tab ${profileTab === 'consent' ? 'active' : ''}`} onClick={() => setProfileTab('consent')}>Consent</button>
+              </div>
+
+              {(profileTab === 'treatment' || profileTab === 'info') && (
+                <>
+                  <h2 className="treatment-plans-banner">Treatment Plan & Cost for {profilePatient.name}</h2>
+                  <div className="treatment-cost-table-wrap">
+                    <table className="treatment-cost-table">
+                      <thead>
+                        <tr>
+                          <th>Tooth</th>
+                          <th>Diagnosis</th>
+                          <th>Treatment</th>
+                          <th>Cost (TK)</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {treatmentPlans.length === 0 ? (
+                          <tr><td colSpan={6} className="text-center">No treatment plans yet</td></tr>
+                        ) : (
+                          treatmentPlans.map(plan => (
+                            <tr key={plan.id}>
+                              <td><strong>{plan.toothNumber}</strong></td>
+                              <td>{plan.diagnosis || '—'}</td>
+                              <td>{plan.procedure || '—'}</td>
+                              <td>{plan.cost || '0'}</td>
+                              <td><span className={`status-badge ${plan.status.toLowerCase().replace(' ', '-')}`}>{plan.status}</span></td>
+                              <td>
+                                <button type="button" className="btn-icon" onClick={() => { setEditingPlan(plan); setShowTreatmentPlanModal(true); }} title="Edit"><i className="fa-solid fa-edit"></i></button>
+                                <button type="button" className="btn-icon danger" onClick={() => handleDeleteTreatmentPlan(plan)} title="Delete"><i className="fa-solid fa-trash"></i></button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colSpan={3}><strong>Total</strong></td>
+                          <td><strong>{treatmentPlans.reduce((sum, p) => sum + parseFloat(p.cost || '0'), 0).toLocaleString()} TK</strong></td>
+                          <td colSpan={2}></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div className="treatment-plans-add">
+                    <button type="button" className="btn-primary" onClick={() => { setEditingPlan(null); setShowTreatmentPlanModal(true); }}><i className="fa-solid fa-plus"></i> Add Treatment</button>
+                  </div>
+                </>
+              )}
+
+              {profileTab === 'ledger' && (
+                <>
+                  <h2 className="treatment-plans-banner">Payment Ledger for {profilePatient.name}</h2>
+                  <div className="treatment-cost-table-wrap">
+                    <table className="treatment-cost-table ledger-table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Treatment Done</th>
+                          <th>Cost (TK)</th>
+                          <th>Paid (TK)</th>
+                          <th>Due (TK)</th>
+                          <th>Doctor</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {treatmentRecords.length === 0 ? (
+                          <tr><td colSpan={7} className="text-center">No records yet</td></tr>
+                        ) : (
+                          treatmentRecords.map(record => (
+                            <tr key={record.id}>
+                              <td>{record.date}</td>
+                              <td>{record.treatmentDone}</td>
+                              <td>{record.cost}</td>
+                              <td className="text-success">{record.paid}</td>
+                              <td className="text-danger">{record.due}</td>
+                              <td>{record.doctorSignature || '—'}</td>
+                              <td>
+                                <button type="button" className="btn-icon" onClick={() => { setEditingRecord(record); setShowTreatmentRecordModal(true); }} title="Edit"><i className="fa-solid fa-edit"></i></button>
+                                <button type="button" className="btn-icon danger" onClick={() => handleDeleteTreatmentRecord(record)} title="Delete"><i className="fa-solid fa-trash"></i></button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colSpan={2}><strong>Total</strong></td>
+                          <td><strong>{calculateTotals().totalCost.toLocaleString()}</strong></td>
+                          <td className="text-success"><strong>{calculateTotals().totalPaid.toLocaleString()}</strong></td>
+                          <td className="text-danger"><strong>{calculateTotals().totalDue.toLocaleString()}</strong></td>
+                          <td colSpan={2}></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div className="treatment-plans-add">
+                    <button type="button" className="btn-primary" onClick={() => { setEditingRecord(null); setShowTreatmentRecordModal(true); }}><i className="fa-solid fa-plus"></i> Add Record</button>
+                  </div>
+                </>
+              )}
+
+              {profileTab === 'consent' && (
+                <>
+                  <h2 className="treatment-plans-banner">Patient Consent</h2>
+                  <div className="consent-display">
+                    {consent?.agreed ? (
+                      <div className="consent-signed">
+                        <p><i className="fa-solid fa-check-circle text-success"></i> Consent has been signed</p>
+                        <div className="consent-details">
+                          <p><strong>Name:</strong> {consent.signatureName}</p>
+                          <p><strong>Date:</strong> {consent.signatureDate}</p>
+                          <p className="consent-text-display">{consent.consentText}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="consent-unsigned">
+                        <p><i className="fa-solid fa-exclamation-circle text-warning"></i> Consent not yet signed</p>
+                        <button type="button" className="btn-primary" onClick={() => setShowConsentModal(true)}><i className="fa-solid fa-file-signature"></i> Sign Consent Form</button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </section>
+
+            {/* Legacy treatment plan cards - keeping for backwards compatibility */}
+            <section className="treatment-plans-section" style={{ display: 'none' }}>
               <h2 className="treatment-plans-banner">Treatment Plans For {profilePatient.name}</h2>
               <div className="treatment-plans-grid">
                 {treatmentPlans.length === 0 ? (
@@ -405,7 +757,8 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
                     <div key={plan.id} className="treatment-plan-card">
                       <div className="treatment-plan-card-header"><span className="treatment-plan-tooth"><i className="fa-solid fa-tooth"></i> Tooth No: {plan.toothNumber}</span></div>
                       <div className="treatment-plan-body">
-                        <p><strong>{plan.procedure || '—'}</strong></p>
+                        <p><strong>{plan.procedure || '—'}</strong> - {plan.cost || '0'} TK</p>
+                        <p><strong>Diagnosis:</strong> {plan.diagnosis || '—'}</p>
                         <p><strong>CC:</strong> {plan.cc || '—'}</p>
                         <p><strong>CF:</strong> {plan.cf || '—'}</p>
                         <p><strong>Investigation:</strong> {plan.investigation || '—'}</p>
@@ -518,7 +871,7 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
                         <tr key={p.id}>
                           <td>{index + 1}</td><td><strong>{p.name}</strong></td><td>{p.mobile}</td><td>{p.mobile_type ? MOBILE_TYPE_LABELS[p.mobile_type] ?? p.mobile_type : '—'}</td><td>{p.due ?? '—'}</td>
                           <td>
-                            <button type="button" className="records-table-btn records-table-btn-view" onClick={() => { setProfilePatient(p); setMedicalHistory(loadMedicalHistory(p.id)); setTreatmentPlans(loadTreatmentPlans(p.id)); setRecordsView('patient-profile'); }}><i className="fa-solid fa-eye"></i></button>
+                            <button type="button" className="records-table-btn records-table-btn-view" onClick={() => { setProfilePatient(p); setMedicalHistory(loadMedicalHistory(p.id)); setTreatmentPlans(loadTreatmentPlans(p.id)); setTreatmentRecords(loadTreatmentRecords(p.id)); setConsent(loadConsent(p.id)); setProfileTab('info'); setRecordsView('patient-profile'); }}><i className="fa-solid fa-eye"></i></button>
                             <button type="button" className="records-table-btn records-table-btn-edit" onClick={() => { setEditingPatient(p); setShowPatientModal(true); }}><i className="fa-solid fa-edit"></i></button>
                             <button type="button" className="records-table-btn records-table-btn-delete" onClick={() => setDeletingPatient(p)}><i className="fa-solid fa-trash"></i></button>
                           </td>
@@ -641,14 +994,55 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
 
       {showMedicalHistoryModal && profilePatient && (
         <div className="records-modal-overlay" onClick={() => setShowMedicalHistoryModal(false)}>
-          <div className="records-modal" onClick={e => e.stopPropagation()}>
+          <div className="records-modal records-modal-lg" onClick={e => e.stopPropagation()}>
             <div className="records-modal-header"><h5><i className="fa-solid fa-file-medical"></i> Medical History</h5><button type="button" className="records-modal-close" onClick={() => setShowMedicalHistoryModal(false)}>×</button></div>
             <div className="records-modal-body">
               <form onSubmit={handleSaveMedicalHistory}>
-                <div className="records-form-row"><div className="form-group"><label className="label">BP</label><input className="input" name="bp" defaultValue={medicalHistory.bp} placeholder="/" /></div><div className="form-group"><label className="label">Heart Disease</label><input className="input" name="heartDisease" defaultValue={medicalHistory.heartDisease} /></div></div>
-                <div className="records-form-row"><div className="form-group"><label className="label">Diabetic</label><input className="input" name="diabetic" defaultValue={medicalHistory.diabetic} /></div><div className="form-group"><label className="label">Hepatitis</label><input className="input" name="hepatitis" defaultValue={medicalHistory.hepatitis} /></div></div>
-                <div className="records-form-row"><div className="form-group"><label className="label">Bleeding Disorder</label><input className="input" name="bleedingDisorder" defaultValue={medicalHistory.bleedingDisorder} /></div><div className="form-group"><label className="label">Allergy</label><input className="input" name="allergy" defaultValue={medicalHistory.allergy} /></div></div>
-                <div className="records-form-row"><div className="form-group"><label className="label">Pregnant/Lactating</label><input className="input" name="pregnantLactating" defaultValue={medicalHistory.pregnantLactating} /></div><div className="form-group"><label className="label">Other</label><input className="input" name="other" defaultValue={medicalHistory.other} /></div></div>
+                <div className="medical-history-grid">
+                  <div className="medical-section">
+                    <h6 className="medical-section-title">Diseases Like</h6>
+                    <label className="checkbox-label"><input type="checkbox" name="bloodPressure" defaultChecked={medicalHistory.bloodPressure} /> Blood Pressure (High/Low)</label>
+                    <label className="checkbox-label"><input type="checkbox" name="heartProblems" defaultChecked={medicalHistory.heartProblems} /> Heart Problems (Rheumatic Fever)</label>
+                    <label className="checkbox-label"><input type="checkbox" name="diabetes" defaultChecked={medicalHistory.diabetes} /> Diabetes</label>
+                    <label className="checkbox-label"><input type="checkbox" name="pepticUlcer" defaultChecked={medicalHistory.pepticUlcer} /> Peptic Ulcer / Acidity</label>
+                    <label className="checkbox-label"><input type="checkbox" name="jaundice" defaultChecked={medicalHistory.jaundice} /> Jaundice / Liver Diseases</label>
+                    <label className="checkbox-label"><input type="checkbox" name="asthma" defaultChecked={medicalHistory.asthma} /> Asthma</label>
+                    <label className="checkbox-label"><input type="checkbox" name="tuberculosis" defaultChecked={medicalHistory.tuberculosis} /> Tuberculosis</label>
+                    <label className="checkbox-label"><input type="checkbox" name="kidneyDiseases" defaultChecked={medicalHistory.kidneyDiseases} /> Kidney Diseases</label>
+                    <label className="checkbox-label"><input type="checkbox" name="aids" defaultChecked={medicalHistory.aids} /> AIDS / HIV</label>
+                    <label className="checkbox-label"><input type="checkbox" name="thyroid" defaultChecked={medicalHistory.thyroid} /> Thyroid</label>
+                    <label className="checkbox-label"><input type="checkbox" name="hepatitis" defaultChecked={medicalHistory.hepatitis} /> Hepatitis</label>
+                    <label className="checkbox-label"><input type="checkbox" name="stroke" defaultChecked={medicalHistory.stroke} /> Stroke</label>
+                    <label className="checkbox-label"><input type="checkbox" name="bleedingDisorder" defaultChecked={medicalHistory.bleedingDisorder} /> Bleeding Disorder</label>
+                    <div className="form-group mt-2"><label className="label">Other Problems</label><input className="input" name="otherDiseases" defaultValue={medicalHistory.otherDiseases} placeholder="Please specify" /></div>
+                  </div>
+                  <div className="medical-section">
+                    <h6 className="medical-section-title">If Female</h6>
+                    <label className="checkbox-label"><input type="checkbox" name="isPregnant" defaultChecked={medicalHistory.isPregnant} /> Pregnant</label>
+                    <label className="checkbox-label"><input type="checkbox" name="isLactating" defaultChecked={medicalHistory.isLactating} /> Lactating Mother</label>
+                    
+                    <h6 className="medical-section-title mt-3">Allergic To</h6>
+                    <label className="checkbox-label"><input type="checkbox" name="allergyPenicillin" defaultChecked={medicalHistory.allergyPenicillin} /> Penicillin</label>
+                    <label className="checkbox-label"><input type="checkbox" name="allergySulphur" defaultChecked={medicalHistory.allergySulphur} /> Sulphur</label>
+                    <label className="checkbox-label"><input type="checkbox" name="allergyAspirin" defaultChecked={medicalHistory.allergyAspirin} /> Aspirin</label>
+                    <label className="checkbox-label"><input type="checkbox" name="allergyLocalAnaesthesia" defaultChecked={medicalHistory.allergyLocalAnaesthesia} /> Local Anaesthesia</label>
+                    <div className="form-group mt-2"><label className="label">Other Allergies</label><input className="input" name="allergyOther" defaultValue={medicalHistory.allergyOther} placeholder="Please specify" /></div>
+                  </div>
+                  <div className="medical-section">
+                    <h6 className="medical-section-title">Taking Drug</h6>
+                    <label className="checkbox-label"><input type="checkbox" name="takingAspirinBloodThinner" defaultChecked={medicalHistory.takingAspirinBloodThinner} /> Aspirin / Blood Thinner</label>
+                    <label className="checkbox-label"><input type="checkbox" name="takingAntihypertensive" defaultChecked={medicalHistory.takingAntihypertensive} /> Antihypertensive</label>
+                    <label className="checkbox-label"><input type="checkbox" name="takingInhaler" defaultChecked={medicalHistory.takingInhaler} /> Inhaler</label>
+                    <div className="form-group mt-2"><label className="label">Other Drugs</label><input className="input" name="takingOther" defaultValue={medicalHistory.takingOther} placeholder="Please specify" /></div>
+                    
+                    <h6 className="medical-section-title mt-3">Bad Habits</h6>
+                    <label className="checkbox-label"><input type="checkbox" name="habitSmoking" defaultChecked={medicalHistory.habitSmoking} /> Smoking</label>
+                    <label className="checkbox-label"><input type="checkbox" name="habitBetelLeaf" defaultChecked={medicalHistory.habitBetelLeaf} /> Chewing Betel Leaf/Nut</label>
+                    <label className="checkbox-label"><input type="checkbox" name="habitAlcohol" defaultChecked={medicalHistory.habitAlcohol} /> Alcohol</label>
+                    <div className="form-group mt-2"><label className="label">Other Habits</label><input className="input" name="habitOther" defaultValue={medicalHistory.habitOther} placeholder="Please specify" /></div>
+                  </div>
+                </div>
+                <div className="form-group mt-3"><label className="label">Additional Details / Notes</label><textarea className="input" name="details" rows={3} defaultValue={medicalHistory.details} placeholder="Any additional medical details..." /></div>
                 <div className="records-modal-footer"><button type="button" className="btn-ghost" onClick={() => setShowMedicalHistoryModal(false)}>Cancel</button><button type="submit" className="btn-primary">Save</button></div>
               </form>
             </div>
@@ -662,10 +1056,84 @@ export const RecordsPage: React.FC<Props> = ({ onBackToLogin, userName = 'User' 
             <div className="records-modal-header"><h5><i className="fa-solid fa-clipboard-list"></i> {editingPlan ? 'Edit' : 'Add'} Treatment Plan</h5><button type="button" className="records-modal-close" onClick={() => { setShowTreatmentPlanModal(false); setEditingPlan(null); }}>×</button></div>
             <div className="records-modal-body">
               <form onSubmit={handleSaveTreatmentPlan} key={editingPlan?.id ?? 'new'}>
-                <div className="records-form-row"><div className="form-group"><label className="label">Tooth Number</label><input className="input" name="toothNumber" defaultValue={editingPlan?.toothNumber ?? (selectedTeeth.size > 0 ? String([...selectedTeeth].sort((a, b) => a - b)[0]) : '')} placeholder="e.g. 18" required /></div><div className="form-group"><label className="label">Procedure</label><input className="input" name="procedure" defaultValue={editingPlan?.procedure} placeholder="e.g. Extraction" /></div></div>
-                <div className="records-form-row"><div className="form-group"><label className="label">CC</label><input className="input" name="cc" defaultValue={editingPlan?.cc} placeholder="Chief Complaint" /></div><div className="form-group"><label className="label">CF</label><input className="input" name="cf" defaultValue={editingPlan?.cf} placeholder="Clinical Finding" /></div></div>
-                <div className="records-form-row"><div className="form-group"><label className="label">Investigation</label><input className="input" name="investigation" defaultValue={editingPlan?.investigation} placeholder="e.g. RVG" /></div><div className="form-group"><label className="label">Status</label><select className="select" name="status" defaultValue={editingPlan?.status ?? 'Not Start'}><option value="Not Start">Not Start</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select></div></div>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Tooth Number</label><input className="input" name="toothNumber" defaultValue={editingPlan?.toothNumber ?? (selectedTeeth.size > 0 ? String([...selectedTeeth].sort((a, b) => a - b)[0]) : '')} placeholder="e.g. 18" required /></div>
+                  <div className="form-group"><label className="label">Diagnosis</label>
+                    <select className="select" name="diagnosis" defaultValue={editingPlan?.diagnosis}>
+                      <option value="">Select Diagnosis</option>
+                      {DIAGNOSIS_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Treatment/Procedure</label>
+                    <select className="select" name="procedure" defaultValue={editingPlan?.procedure}>
+                      <option value="">Select Treatment</option>
+                      {TREATMENT_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group"><label className="label">Cost (TK)</label><input type="number" className="input" name="cost" defaultValue={editingPlan?.cost} placeholder="0" /></div>
+                </div>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Chief Complaint (CC)</label><input className="input" name="cc" defaultValue={editingPlan?.cc} placeholder="e.g. Pain, Swelling" /></div>
+                  <div className="form-group"><label className="label">Clinical Finding (CF)</label><input className="input" name="cf" defaultValue={editingPlan?.cf} placeholder="e.g. Deep Caries" /></div>
+                </div>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Investigation</label><input className="input" name="investigation" defaultValue={editingPlan?.investigation} placeholder="e.g. X-Ray, RVG" /></div>
+                  <div className="form-group"><label className="label">Status</label>
+                    <select className="select" name="status" defaultValue={editingPlan?.status ?? 'Not Start'}>
+                      <option value="Not Start">Not Start</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="records-modal-footer"><button type="button" className="btn-ghost" onClick={() => { setShowTreatmentPlanModal(false); setEditingPlan(null); }}>Cancel</button><button type="submit" className="btn-primary">{editingPlan ? 'Update' : 'Add'}</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTreatmentRecordModal && profilePatient && (
+        <div className="records-modal-overlay" onClick={() => { setShowTreatmentRecordModal(false); setEditingRecord(null); }}>
+          <div className="records-modal" onClick={e => e.stopPropagation()}>
+            <div className="records-modal-header"><h5><i className="fa-solid fa-receipt"></i> {editingRecord ? 'Edit' : 'Add'} Treatment Record</h5><button type="button" className="records-modal-close" onClick={() => { setShowTreatmentRecordModal(false); setEditingRecord(null); }}>×</button></div>
+            <div className="records-modal-body">
+              <form onSubmit={handleSaveTreatmentRecord} key={editingRecord?.id ?? 'new'}>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Date</label><input type="date" className="input" name="date" defaultValue={editingRecord?.date ?? new Date().toISOString().split('T')[0]} required /></div>
+                  <div className="form-group" style={{ flex: 2 }}><label className="label">Treatment Done</label><input className="input" name="treatmentDone" defaultValue={editingRecord?.treatmentDone} placeholder="e.g. Scaling, Extraction" required /></div>
+                </div>
+                <div className="records-form-row">
+                  <div className="form-group"><label className="label">Cost (TK)</label><input type="number" className="input" name="cost" defaultValue={editingRecord?.cost} placeholder="0" required /></div>
+                  <div className="form-group"><label className="label">Paid (TK)</label><input type="number" className="input" name="paid" defaultValue={editingRecord?.paid} placeholder="0" required /></div>
+                  <div className="form-group"><label className="label">Due (TK)</label><input type="number" className="input" name="due" defaultValue={editingRecord?.due} placeholder="0" /></div>
+                </div>
+                <div className="form-group"><label className="label">Doctor Signature</label><input className="input" name="doctorSignature" defaultValue={editingRecord?.doctorSignature} placeholder="Doctor's name" /></div>
+                <div className="records-modal-footer"><button type="button" className="btn-ghost" onClick={() => { setShowTreatmentRecordModal(false); setEditingRecord(null); }}>Cancel</button><button type="submit" className="btn-primary">{editingRecord ? 'Update' : 'Add'}</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showConsentModal && profilePatient && (
+        <div className="records-modal-overlay" onClick={() => setShowConsentModal(false)}>
+          <div className="records-modal" onClick={e => e.stopPropagation()}>
+            <div className="records-modal-header"><h5><i className="fa-solid fa-file-signature"></i> Patient Consent</h5><button type="button" className="records-modal-close" onClick={() => setShowConsentModal(false)}>×</button></div>
+            <div className="records-modal-body">
+              <form onSubmit={handleSaveConsent}>
+                <div className="consent-text">
+                  <p>I, <strong>{profilePatient.name}</strong>, do hereby agree to undergo necessary treatment of myself / my dependent.</p>
+                  <p>The procedure and the potential complications (if any) were explained to me.</p>
+                  <p>I accept the plan of dental treatment, risk factors and treatment cost for myself / my children.</p>
+                </div>
+                <div className="records-form-row">
+                  <div className="form-group" style={{ flex: 2 }}><label className="label">Signature / Name</label><input className="input" name="signatureName" defaultValue={consent?.signatureName ?? profilePatient.name} required /></div>
+                  <div className="form-group"><label className="label">Date</label><input type="date" className="input" name="signatureDate" defaultValue={consent?.signatureDate ?? new Date().toISOString().split('T')[0]} required /></div>
+                </div>
+                <div className="records-modal-footer"><button type="button" className="btn-ghost" onClick={() => setShowConsentModal(false)}>Cancel</button><button type="submit" className="btn-primary">Sign Consent</button></div>
               </form>
             </div>
           </div>
