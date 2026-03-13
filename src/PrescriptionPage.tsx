@@ -233,10 +233,16 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
   const [headerSettings, setHeaderSettings] = useState({
     doctorName: 'Dr. Muhammad Ali',
     qualification: 'BDS, MDS',
+    specialization: '',
+    department: '',
+    college: '',
+    bmdcRegNo: '',
     clinicName: 'BaigDentPro Dental Care',
     address: '123 Medical Center, Main Road',
     phone: '+880 1617-180711',
     email: 'contact@baigdentpro.com',
+    visitTime: '',
+    dayOff: '',
   });
 
   const getOeDisplayString = useCallback((): string => {
@@ -333,44 +339,163 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
     showNotice('Prescription saved successfully!');
   };
 
+  const getPrintHtml = useCallback((opts: { forPrint?: boolean }) => {
+    const revisitStr = [followUpDay.trim(), revisitUnit].filter(Boolean).join(' ');
+    const oeDisplay = getOeDisplayString().replace(/\n/g, '<br>');
+    const richHtml = richTextRef.current?.innerHTML ?? '';
+    const doc = headerSettings.doctorName || 'Doctor';
+    const qual = headerSettings.qualification || '';
+    const spec = headerSettings.specialization || '';
+    const dept = headerSettings.department || '';
+    const college = headerSettings.college || '';
+    const bmdc = headerSettings.bmdcRegNo || '';
+    const clinic = headerSettings.clinicName || '';
+    const addr = headerSettings.address || '';
+    const ph = headerSettings.phone || '';
+    const visitTime = headerSettings.visitTime || '';
+    const dayOff = headerSettings.dayOff || '';
+    const wt = weight ? `${weight} kg` : '—';
+    const bmiStr = bmiValue ? `BMI: ${bmiValue}` : '';
+    const regNo = (patient.regNo || visit.visitNo || '').toString().replace(/\s/g, '');
+    const barcodeData = encodeURIComponent(regNo || '0');
+    const barcodeDigits = (regNo || '—').split('').join(' ');
+    const drugsList = drugs
+      .filter((r) => r.brand || r.dose || r.duration)
+      .map((r) => {
+        const foodBn = r.beforeFood ? '(আহারের ১ ঘন্টা আগে)' : r.afterFood ? '(খাবার পর)' : '';
+        const durBn = r.durationUnit === 'M' ? `${r.duration} মাস` : `${r.duration} দিন`;
+        const line2 = [foodBn, durBn].filter(Boolean).join(' - ');
+        return `<div class="rx-item"><span class="rx-line1">${(r.brand || '').replace(/</g, '&lt;')} ${(r.dose || '').replace(/</g, '&lt;')}</span><br><span class="rx-line2">${line2.replace(/</g, '&lt;')}</span></div>`;
+      })
+      .join('');
+    return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Prescription</title>
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:Arial,sans-serif;font-size:13px;line-height:1.45;color:#000;background:#fff;margin:0;padding:14px;}
+  .print-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:8px;}
+  .print-header-left{text-align:left;font-size:13px;}
+  .print-header-right{text-align:right;font-size:13px;}
+  .print-header-left .doc-name,.print-header-right .chamber-label{font-weight:bold;font-size:14px;display:block;margin-bottom:2px;}
+  .patient-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;margin-bottom:10px;padding:6px 0;border-bottom:1px solid #000;font-size:12px;}
+  .patient-line span{white-space:nowrap;}
+  .print-body{display:flex;gap:20px;margin-top:10px;}
+  .print-left{flex:1;min-width:0;}
+  .print-right{flex:1;min-width:0;border-left:2px solid #000;padding-left:14px;}
+  .print-left .section{margin-bottom:10px;}
+  .section-title{font-weight:bold;margin-bottom:2px;}
+  .section-title-ul{font-weight:bold;text-decoration:underline;margin-bottom:2px;}
+  .barcode-block{margin-bottom:8px;}
+  .barcode-block img{height:36px;display:block;margin-bottom:2px;}
+  .barcode-digits{font-size:11px;letter-spacing:2px;}
+  .rx-title{font-weight:bold;font-size:18px;margin-bottom:10px;}
+  .rx-item{margin-bottom:12px;}
+  .rx-line1{font-weight:bold;}
+  .rx-line2{color:#000;}
+  .diagnosis{margin-top:12px;font-weight:bold;}
+  .print-footer{margin-top:20px;padding-top:8px;border-top:1px solid #000;font-size:12px;text-align:center;}
+  @media print{body{padding:10px;} .print-header,.patient-line,.print-body,.print-footer{break-inside:avoid;}}
+</style></head>
+<body>
+  <div class="print-header">
+    <div class="print-header-left">
+      <span class="doc-name">${(doc || '').replace(/</g, '&lt;')}</span>
+      ${qual ? qual + '<br>' : ''}
+      ${spec ? spec + '<br>' : ''}
+      ${dept ? dept + '<br>' : ''}
+      ${college ? college + '<br>' : ''}
+      ${bmdc ? 'BMDC Reg. No- ' + bmdc.replace(/</g, '&lt;') : ''}
+    </div>
+    <div class="print-header-right">
+      <span class="chamber-label">Chember:</span>
+      ${clinic ? clinic + '<br>' : ''}
+      ${addr ? addr + '<br>' : ''}
+      ${ph ? 'Mobile: ' + ph + '<br>' : ''}
+      ${visitTime ? 'Visit Time ' + visitTime + '<br>' : ''}
+      ${dayOff ? dayOff : ''}
+    </div>
+  </div>
+  <div class="patient-line">
+    <span>Name : ${(patient.name || '—').replace(/</g, '&lt;')}</span>
+    <span>Age : ${(patient.age || '—').replace(/</g, '&lt;')}</span>
+    <span>Sex : ${(patient.sex || '—').replace(/</g, '&lt;')}</span>
+    <span>Date : ${(patient.date || '—').replace(/</g, '&lt;')}</span>
+    <span>Address : ${(patient.address || '—').replace(/</g, '&lt;')}</span>
+    <span>Reg. No : ${(patient.regNo || '—').replace(/</g, '&lt;')}</span>
+    <span>Wt. : ${wt.replace(/</g, '&lt;')}</span>
+    <span>Mobile : ${(patient.mobile || '—').replace(/</g, '&lt;')}</span>
+  </div>
+  <div class="print-body">
+    <div class="print-left">
+      <div class="barcode-block">
+        <img src="https://barcode.tec-it.com/barcode.ashx?data=${barcodeData}&code=Code128&dpi=96" alt="barcode" />
+        <span class="barcode-digits">${barcodeDigits.replace(/</g, '&lt;')}</span><br>
+        <span class="section-title">Visit No:</span> ${(visit.visitNo || '—').replace(/</g, '&lt;')}
+      </div>
+      <div class="section"><span class="section-title">C/C</span><br>${(cc || '—').replace(/\n/g, '<br>').replace(/</g, '&lt;')}</div>
+      <div class="section"><span class="section-title">O/E</span><br>${oeDisplay || '—'}${bmiStr ? '<br>' + bmiStr : ''}</div>
+      <div class="section"><span class="section-title">D/H</span><br>${(drugHistory || '—').replace(/\n/g, '<br>').replace(/</g, '&lt;')}</div>
+      <div class="section"><span class="section-title-ul">Present History</span><br>${(presentHistory || '—').replace(/\n/g, '<br>').replace(/</g, '&lt;')}</div>
+      <div class="section"><span class="section-title-ul">Past History</span><br>${(pastHistory || '—').replace(/\n/g, '<br>').replace(/</g, '&lt;')}</div>
+      ${printEdd ? `<div class="section"><span class="section-title">EDD</span><br>${(edd.edd || edd.lmp || '—').replace(/</g, '&lt;')}</div>` : ''}
+      ${printNotes ? `<div class="section"><span class="section-title">Notes</span><br>${(notesHistory || '—').replace(/\n/g, '<br>').replace(/</g, '&lt;')}</div>` : ''}
+      <div class="section"><span class="section-title">Advice</span><br>${richHtml || '—'}</div>
+      ${dx ? `<div class="diagnosis">&#916; ${(dx || '').replace(/\n/g, ' ').replace(/</g, '&lt;').toUpperCase()}</div>` : ''}
+    </div>
+    <div class="print-right">
+      <div class="rx-title">Rx.</div>
+      <div class="rx-drug">${drugsList || '—'}</div>
+      ${revisitStr ? `<div class="section" style="margin-top:10px;"><strong>** ${revisitStr} পর আসবেন।</strong></div>` : ''}
+    </div>
+  </div>
+  <div class="print-footer">
+    নিয়ম মাফিক ঔষধ খাবেন। ডাক্তারের পরামর্শ ব্যতীত ঔষধ পরিবর্তন নিষেধ।
+  </div>
+</body></html>`;
+  }, [patient, visit, dx, cc, getOeDisplayString, drugHistory, presentHistory, pastHistory, notesHistory, edd, drugs, followUpDay, revisitUnit, weight, bmiValue, headerSettings, printEdd, printNotes]);
+
+  const printViaIframe = () => {
+    const html = getPrintHtml({ forPrint: true });
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('style', 'position:fixed;left:0;top:0;width:0;height:0;border:0;');
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow?.document;
+    if (!doc) return;
+    doc.open();
+    doc.write(html);
+    doc.close();
+    const printFn = () => {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      setTimeout(() => document.body.removeChild(iframe), 500);
+    };
+    iframe.onload = () => setTimeout(printFn, 400);
+  };
+
+  const openPreviewInNewTab = () => {
+    const html = getPrintHtml({ forPrint: false });
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank', 'noopener');
+    if (w) setTimeout(() => URL.revokeObjectURL(url), 60000);
+    else {
+      URL.revokeObjectURL(url);
+      showNotice('Allow popups to open preview in a new tab, or use Save & Print to print the prescription.');
+    }
+  };
+
   const handlePrint = (withoutHeader: boolean) => {
-    if (withoutHeader) document.body.classList.add('print-no-header');
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => document.body.classList.remove('print-no-header'), 500);
-    }, 100);
+    handleSave();
+    printViaIframe();
   };
 
   const handleSaveAndPrint = (withoutHeader: boolean) => {
     handleSave();
-    handlePrint(withoutHeader);
+    printViaIframe();
   };
 
   const handlePreview = () => {
-    const w = window.open('', '_blank', 'width=900,height=700');
-    if (!w) return;
-    const revisitStr = [followUpDay.trim(), revisitUnit].filter(Boolean).join(' ');
-    const oeDisplay = getOeDisplayString().replace(/\n/g, '<br>');
-    const richHtml = richTextRef.current?.innerHTML ?? '';
-    w.document.write(`
-      <!DOCTYPE html><html><head><title>Prescription Preview</title>
-      <style>body{font-family:sans-serif;padding:20px;background:#fff;color:#111;line-height:1.5;}
-      table{border-collapse:collapse;} th,td{border:1px solid #ccc;padding:6px;}
-      .oe-block{white-space:pre-wrap;}</style></head><body>
-      <h2>Prescription Preview</h2>
-      <p><strong>Patient:</strong> ${patient.name || '—'} | Age: ${patient.age || '—'} | Sex: ${patient.sex || '—'} | Reg: ${patient.regNo || '—'} | Date: ${patient.date || '—'}</p>
-      <p><strong>Dx:</strong> ${(dx || '—').replace(/\n/g, '<br>')}</p>
-      <p><strong>C/C:</strong> ${(cc || '—').replace(/\n/g, '<br>')}</p>
-      <p><strong>O/E:</strong><br><span class="oe-block">${oeDisplay || '—'}</span></p>
-      <p><strong>Ix:</strong> ${(ix || '—').replace(/\n/g, '<br>')}</p>
-      <table><thead><tr><th>Brand</th><th>Dose</th><th>Duration</th></tr></thead><tbody>
-      ${drugs.filter((r) => r.brand || r.dose || r.duration).map((r) => `<tr><td>${r.brand}</td><td>${r.dose}</td><td>${r.duration} ${r.durationUnit}</td></tr>`).join('') || '<tr><td colspan="3">—</td></tr>'}
-      </tbody></table>
-      ${richHtml ? `<div style="margin-top:12px;">${richHtml}</div>` : ''}
-      ${revisitStr ? `<p><strong>Revisit:</strong> ${revisitStr} পর আসবেন।</p>` : ''}
-      <p>Paid: ${visit.paid} TK | Visit No: ${visit.visitNo} | Last Visit: ${visit.lastVisit}</p>
-      </body></html>`);
-    w.document.close();
+    openPreviewInNewTab();
   };
 
   const showNotice = (msg: string) => {
@@ -823,6 +948,42 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
             />
           </div>
           <div className="form-group">
+            <label className="label">Specialization</label>
+            <input 
+              className="input" 
+              value={headerSettings.specialization}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, specialization: e.target.value })}
+              placeholder="e.g. Medicine Specialist"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Department</label>
+            <input 
+              className="input" 
+              value={headerSettings.department}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, department: e.target.value })}
+              placeholder="e.g. Department Of Medicine"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">College / Affiliation</label>
+            <input 
+              className="input" 
+              value={headerSettings.college}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, college: e.target.value })}
+              placeholder="e.g. Demo Medical College"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">BMDC Reg. No</label>
+            <input 
+              className="input" 
+              value={headerSettings.bmdcRegNo}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, bmdcRegNo: e.target.value })}
+              placeholder="e.g. 112589"
+            />
+          </div>
+          <div className="form-group">
             <label className="label">Clinic Name</label>
             <input 
               className="input" 
@@ -844,6 +1005,24 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
               className="input" 
               value={headerSettings.address}
               onChange={(e) => setHeaderSettings({ ...headerSettings, address: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Visit Time</label>
+            <input 
+              className="input" 
+              value={headerSettings.visitTime}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, visitTime: e.target.value })}
+              placeholder="e.g. 4PM-10PM"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Day Off</label>
+            <input 
+              className="input" 
+              value={headerSettings.dayOff}
+              onChange={(e) => setHeaderSettings({ ...headerSettings, dayOff: e.target.value })}
+              placeholder="e.g. Friday Off"
             />
           </div>
           <div className="form-group" style={{ gridColumn: '1 / -1' }}>
