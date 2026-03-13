@@ -8,72 +8,80 @@
 }
 
 :root {
-  /* BaigDentPro Brand Colors - Professional Light Theme */
-  --neo-primary: #0891b2;           /* Cyan/Teal - Professional */
-  --neo-primary-glow: rgba(8, 145, 178, 0.3);
-  --neo-primary-dim: rgba(8, 145, 178, 0.1);
-  --neo-secondary: #1e40af;         /* Deep blue accent */
-  --neo-secondary-glow: rgba(30, 64, 175, 0.3);
-  --neo-secondary-dim: rgba(30, 64, 175, 0.1);
-  --neo-accent: #06b6d4;            /* Light cyan */
-  
-  /* Clean White/Light Theme Base */
-  --neo-bg-deep: #f8fafc;           /* Lightest background */
-  --neo-bg-base: #f1f5f9;           /* Main background - soft gray */
-  --neo-bg-surface: #ffffff;        /* Card/panel surface - pure white */
-  --neo-bg-elevated: #ffffff;       /* Elevated elements */
+  /* Medical / Clinical Theme - High contrast, healthcare aesthetic */
+  --medical-primary: #0d9488;       /* Teal - clinical, trustworthy */
+  --medical-primary-dark: #0f766e;
+  --medical-primary-light: #14b8a6;
+  --medical-secondary: #0369a1;    /* Sky blue - calm */
+  --medical-accent: #059669;       /* Green - health, success */
+  --medical-bg-page: #f0fdfa;      /* Very light teal tint */
+  --medical-bg-card: #ffffff;
+  --medical-bg-soft: #ccfbf1;     /* Light teal for highlights */
+  --medical-text: #134e4a;         /* Dark teal - high contrast on white */
+  --medical-text-secondary: #115e59;
+  --medical-text-muted: #64748b;   /* Readable muted on light bg */
+  --medical-border: #99f6e4;
+  --medical-border-strong: #2dd4bf;
+
+  /* BaigDentPro / Legacy - aligned to medical */
+  --neo-primary: #0d9488;
+  --neo-primary-glow: rgba(13, 148, 136, 0.25);
+  --neo-primary-dim: rgba(13, 148, 136, 0.08);
+  --neo-secondary: #0369a1;
+  --neo-secondary-glow: rgba(3, 105, 161, 0.25);
+  --neo-secondary-dim: rgba(3, 105, 161, 0.08);
+  --neo-accent: #14b8a6;
+
+  --neo-bg-deep: #f0fdfa;
+  --neo-bg-base: #ecfdf5;
+  --neo-bg-surface: #ffffff;
+  --neo-bg-elevated: #ffffff;
   --neo-bg-card: #ffffff;
-  --neo-bg-glass: rgba(255, 255, 255, 0.9);
-  
-  /* Text Colors - Dark on Light */
-  --neo-text-primary: #0f172a;
-  --neo-text-secondary: #475569;
-  --neo-text-muted: #94a3b8;
-  --neo-text-glow: #0891b2;
-  
-  /* Border & Effects */
-  --neo-border: #e2e8f0;
-  --neo-border-glow: rgba(8, 145, 178, 0.3);
-  --neo-shadow-glow: 0 4px 20px rgba(8, 145, 178, 0.15);
-  --neo-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-  
-  /* Status Colors */
-  --neo-success: #10b981;
-  --neo-success-glow: rgba(16, 185, 129, 0.2);
-  --neo-warning: #f59e0b;
-  --neo-warning-glow: rgba(245, 158, 11, 0.2);
-  --neo-danger: #ef4444;
-  --neo-danger-glow: rgba(239, 68, 68, 0.2);
-  
-  /* Glass Effect - Light */
-  --glass-bg: rgba(255, 255, 255, 0.95);
-  --glass-border: #e2e8f0;
+  --neo-bg-glass: rgba(255, 255, 255, 0.96);
+
+  /* Text - strong visibility (WCAG AA) */
+  --neo-text-primary: #134e4a;
+  --neo-text-secondary: #0f766e;
+  --neo-text-muted: #64748b;
+
+  --neo-border: #99f6e4;
+  --neo-border-glow: rgba(13, 148, 136, 0.3);
+  --neo-shadow-glow: 0 4px 20px rgba(13, 148, 136, 0.12);
+  --neo-shadow-card: 0 2px 12px rgba(13, 148, 136, 0.06);
+
+  --neo-success: #059669;
+  --neo-success-glow: rgba(5, 150, 105, 0.2);
+  --neo-warning: #d97706;
+  --neo-warning-glow: rgba(217, 119, 6, 0.2);
+  --neo-danger: #dc2626;
+  --neo-danger-glow: rgba(220, 38, 38, 0.2);
+
+  --glass-bg: rgba(255, 255, 255, 0.96);
+  --glass-border: #99f6e4;
   --glass-blur: blur(12px);
 
   /* Legacy compatibility */
-  --primary-color: #0891b2;
-  --primary-dark: #0e7490;
-  --primary-light: #06b6d4;
-  --secondary-color: #1e40af;
-  --secondary-dark: #1e3a8a;
-  --accent-color: #f59e0b;
-  --success-color: #10b981;
-  --danger-color: #ef4444;
-  --warning-color: #f59e0b;
-  
-  /* Neutrals - Light Theme */
-  --bg-main: #f1f5f9;
+  --primary-color: #0d9488;
+  --primary-dark: #0f766e;
+  --primary-light: #14b8a6;
+  --secondary-color: #0369a1;
+  --secondary-dark: #075985;
+  --accent-color: #059669;
+  --success-color: #059669;
+  --danger-color: #dc2626;
+  --warning-color: #d97706;
+
+  --bg-main: #ecfdf5;
   --bg-card: #ffffff;
-  --bg-sidebar: #0f172a;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
-  
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #0891b2 0%, #1e40af 100%);
-  --gradient-sidebar: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  --gradient-header: linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #1e40af 100%);
+  --bg-sidebar: #134e4a;
+  --text-primary: #134e4a;
+  --text-secondary: #0f766e;
+  --text-muted: #64748b;
+  --border-color: #99f6e4;
+
+  --gradient-primary: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+  --gradient-sidebar: linear-gradient(180deg, #134e4a 0%, #0f766e 100%);
+  --gradient-header: linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #0369a1 100%);
 }
 
 body {
@@ -674,11 +682,12 @@ body {
 
 .prescription-shell {
   flex: 1;
-  padding: 16px 20px 32px;
+  padding: 20px 24px 40px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: var(--bg-main);
+  gap: 20px;
+  background: var(--medical-bg-page);
+  min-height: 100%;
 }
 
 .prescription-three-col {
@@ -1025,33 +1034,61 @@ body {
 }
 
 /* ========================================
-   Create Prescription - Alternate Style (Card-based)
-   All ZilSoft features, different layout
+   Create Prescription - Medical theme redesign
    ======================================== */
 
 .rx-create {
-  --rx-card-radius: 14px;
-  --rx-card-border: 1px solid var(--border-color);
-  --rx-accent: 4px solid var(--primary-color);
+  --rx-card-radius: 12px;
+  --rx-card-border: 1px solid var(--medical-border);
+  --rx-accent: 4px solid var(--medical-primary);
 }
 
+/* Page title */
+.rx-create .rx-create-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--medical-border);
+}
+
+.rx-create .rx-create-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--medical-text);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rx-create .rx-create-header h2 i {
+  color: var(--medical-primary);
+}
+
+.rx-create .rx-create-header p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: var(--medical-text-secondary);
+}
+
+/* Top bar: patient + actions */
 .rx-create .rx-create-top {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding: 18px 20px;
-  background: linear-gradient(135deg, var(--neo-bg-deep) 0%, var(--neo-bg-surface) 100%);
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  background: var(--medical-bg-card);
   border-radius: var(--rx-card-radius);
   border: var(--rx-card-border);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 16px rgba(13, 148, 136, 0.06);
 }
 
 .rx-create .rx-patient-strip {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px 20px;
+  gap: 12px 20px;
   flex: 1;
   min-width: 280px;
 }
@@ -1059,24 +1096,36 @@ body {
 .rx-create .rx-patient-strip .rx-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .rx-create .rx-patient-strip .rx-field label {
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--medical-text);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
 .rx-create .rx-patient-strip .rx-field input,
 .rx-create .rx-patient-strip .rx-field select {
-  padding: 8px 10px;
-  border: 1px solid var(--border-color);
+  padding: 9px 12px;
+  border: 1px solid var(--medical-border);
   border-radius: 8px;
   font-size: 0.9rem;
-  background: var(--bg-card);
+  background: var(--medical-bg-card);
+  color: var(--medical-text);
+}
+
+.rx-create .rx-patient-strip .rx-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.rx-create .rx-patient-strip .rx-field input:focus,
+.rx-create .rx-patient-strip .rx-field select:focus {
+  outline: none;
+  border-color: var(--medical-primary);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
 
 .rx-create .rx-create-actions {
@@ -1088,8 +1137,8 @@ body {
 
 .rx-create .rx-create-grid {
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 20px;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
   align-items: start;
 }
 
@@ -1100,34 +1149,35 @@ body {
 }
 
 .rx-create .rx-card {
-  background: var(--bg-card);
+  background: var(--medical-bg-card);
   border-radius: var(--rx-card-radius);
   border: var(--rx-card-border);
-  padding: 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(13, 148, 136, 0.05);
 }
 
 .rx-create .rx-card-title {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  padding-left: 12px;
+  color: var(--medical-text);
+  margin-bottom: 14px;
+  padding-left: 14px;
   border-left: var(--rx-accent);
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.01em;
 }
 
 .rx-create .rx-card-title i {
-  color: var(--primary-color);
+  color: var(--medical-primary);
 }
 
 .rx-create .rx-oe-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px 14px;
+  gap: 10px 16px;
 }
 
 .rx-create .rx-oe-row .rx-oe-item {
@@ -1139,30 +1189,33 @@ body {
 
 .rx-create .rx-oe-row .rx-oe-item span {
   font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--medical-text-secondary);
 }
 
 .rx-create .rx-oe-row .rx-oe-item input {
   flex: 1;
   max-width: 140px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color);
+  padding: 7px 10px;
+  border: 1px solid var(--medical-border);
   border-radius: 6px;
   font-size: 0.85rem;
+  color: var(--medical-text);
+  background: var(--medical-bg-card);
 }
 
 .rx-create .rx-template-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .rx-create .rx-template-row .rx-template-label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  min-width: 140px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--medical-text-secondary);
+  min-width: 150px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1170,65 +1223,74 @@ body {
 
 .rx-create .rx-template-row input {
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid var(--border-color);
+  padding: 9px 12px;
+  border: 1px solid var(--medical-border);
   border-radius: 8px;
   font-size: 0.85rem;
+  color: var(--medical-text);
+  background: var(--medical-bg-card);
 }
 
 .rx-create .rx-revisit-line {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 12px;
+  margin-bottom: 16px;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--medical-text-secondary);
 }
 
 .rx-create .rx-revisit-line input[type="text"] {
-  width: 80px;
-  padding: 8px 10px;
-  border: 1px solid var(--border-color);
+  width: 84px;
+  padding: 9px 12px;
+  border: 1px solid var(--medical-border);
   border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--medical-text);
 }
 
 .rx-create .rx-revisit-suffix {
   margin-left: 4px;
+  color: var(--medical-text);
 }
 
 .rx-create .rx-drug-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 16px;
-  margin-bottom: 12px;
+  gap: 12px 18px;
+  margin-bottom: 14px;
 }
 
 .rx-create .rx-drug-bar .rx-drug-inp {
-  padding: 8px 12px;
-  border: 1px solid var(--border-color);
+  padding: 9px 12px;
+  border: 1px solid var(--medical-border);
   border-radius: 8px;
   font-size: 0.9rem;
+  color: var(--medical-text);
+  background: var(--medical-bg-card);
   min-width: 0;
 }
 
 .rx-create .rx-drug-bar .rx-drug-inp.brand { min-width: 140px; }
 .rx-create .rx-drug-bar .rx-drug-inp.dose { min-width: 100px; }
-.rx-create .rx-drug-bar .rx-drug-inp.dur { min-width: 70px; }
+.rx-create .rx-drug-bar .rx-drug-inp.dur { min-width: 72px; }
 
 .rx-create .rx-patient-strip .reg-search-wrap {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   align-items: stretch;
 }
 .rx-create .rx-patient-strip .reg-search-wrap input {
   flex: 1;
   min-width: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--border-color);
+  padding: 9px 12px;
+  border: 1px solid var(--medical-border);
   border-radius: 8px;
   font-size: 0.9rem;
-  background: var(--bg-card);
+  background: var(--medical-bg-card);
+  color: var(--medical-text);
 }
 
 .rx-create .calc-panel table {
@@ -1237,23 +1299,26 @@ body {
   border-collapse: collapse;
 }
 .rx-create .calc-panel td {
-  padding: 6px 8px;
-  border: 1px solid var(--border-color);
+  padding: 8px 10px;
+  border: 1px solid var(--medical-border);
   vertical-align: middle;
+  color: var(--medical-text);
 }
 .rx-create .calc-panel .input,
 .rx-create .calc-panel .select {
   width: 100%;
   max-width: 120px;
-  padding: 6px 8px;
+  padding: 7px 10px;
   border-radius: 6px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--medical-border);
   font-size: 0.85rem;
+  color: var(--medical-text);
+  background: var(--medical-bg-card);
 }
 .rx-create .calc-panel tr:first-child td {
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: var(--neo-bg-deep);
+  font-weight: 700;
+  color: var(--medical-text-secondary);
+  background: var(--medical-bg-page);
 }
 
 .rx-create .rx-create-left {
@@ -1266,31 +1331,63 @@ body {
   margin-bottom: 0;
 }
 
+.rx-create .form-group.compact .label,
+.rx-create .bmi-row .label {
+  color: var(--medical-text-secondary);
+  font-weight: 600;
+}
+.rx-create .drug-info-cnt {
+  color: var(--medical-text-secondary);
+}
+.rx-create .print-options {
+  color: var(--medical-text-secondary);
+}
+.rx-create .print-options label {
+  font-weight: 500;
+}
+
 .rx-create .rx-visit-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 18px;
   align-items: center;
 }
 
 .rx-create .rx-visit-row .rx-visit-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .rx-create .rx-visit-row .rx-visit-item label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--medical-text-secondary);
   white-space: nowrap;
 }
 
 .rx-create .rx-visit-row .rx-visit-item input {
-  width: 70px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color);
+  width: 72px;
+  padding: 7px 10px;
+  border: 1px solid var(--medical-border);
   border-radius: 6px;
   font-size: 0.85rem;
+  color: var(--medical-text);
+  background: var(--medical-bg-card);
+}
+
+/* Textareas in Create Prescription - visibility */
+.rx-create .textarea {
+  color: var(--medical-text);
+  border: 1px solid var(--medical-border);
+  border-radius: 8px;
+  background: var(--medical-bg-card);
+}
+.rx-create .textarea::placeholder {
+  color: var(--text-muted);
+}
+.rx-create .rich-text-editor {
+  color: var(--medical-text);
 }
 
 /* Rich Text Editor */
@@ -2683,12 +2780,13 @@ body {
   left: 50%;
   transform: translateX(-50%);
   padding: 14px 24px;
-  background: var(--text-primary);
+  background: var(--medical-primary);
   color: #fff;
   border-radius: 12px;
   font-size: 0.9rem;
+  font-weight: 500;
   z-index: 1001;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
   animation: noticeSlide 0.3s ease;
 }
 

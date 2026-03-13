@@ -1331,6 +1331,10 @@ export const PrescriptionPage: React.FC<Props> = ({ onBackToLogin, userName = 'U
       </header>
       <main className="prescription-shell">
         <div className="rx-create">
+          <header className="rx-create-header">
+            <h2><i className="fa-solid fa-file-prescription"></i> Create Prescription</h2>
+            <p>Patient details, clinical notes, medications, and print options</p>
+          </header>
           <div className="rx-create-top">
             <div className="rx-patient-strip">
               <div className="rx-field">
