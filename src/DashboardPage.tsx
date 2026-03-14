@@ -525,6 +525,8 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
         <title>মূল্য সংযোজন কর চালানপত্র (মূশক-৬.৩) - ${invoice.invoiceNo}</title>
         <style>
           body { font-family: -apple-system, BlinkMacSystemFont, system-ui, 'Noto Sans Bengali', 'Segoe UI', sans-serif; padding: 24px 32px; color: #111827; background: #fff; }
+          .page { page-break-after: always; }
+          .page:last-child { page-break-after: auto; }
           .mushak-shell { max-width: 800px; margin: 0 auto; border: 1px solid #111827; padding: 24px 32px; }
           .gov-header { text-align: center; margin-bottom: 8px; }
           .gov-header h1 { font-size: 16px; margin: 0; }
@@ -547,7 +549,7 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
         </style>
       </head>
       <body>
-        <div class="mushak-shell">
+        <div class="page mushak-shell">
           <div class="gov-header">
             <h1>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h1>
             <h2>জাতীয় রাজস্ব বোর্ড</h2>
@@ -625,6 +627,57 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
           <div class="footnote">
             * উপরোক্ত তথ্যাবলী সরবরাহের ক্ষেত্রে ফরমটি সম্মিলিত কর চালানপত্র ও উৎসে কর কর্তন সনদপত্র হিসেবে বিবেচিত হইবে এবং উক্ত উৎস কর কর্তনকারীর সরবরাহের ক্ষেত্রে প্রযোজ্য হবে।
           </div>
+        </div>
+
+        <div class="page" style="max-width: 800px; margin: 24px auto 0; border: 1px solid #e5e7eb; padding: 24px 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div>
+              <h2 style="margin: 0 0 4px; font-size: 18px;">BaigDentPro Clinic</h2>
+              <p style="margin: 0; font-size: 13px; color: #6b7280;">Dental practice billing invoice</p>
+            </div>
+            <div style="text-align: right; font-size: 13px; color: #4b5563;">
+              <div>Invoice: <strong>${invoice.invoiceNo}</strong></div>
+              <div>Date: <strong>${invoice.date}</strong></div>
+              <div>Patient: <strong>${invoice.patientName}</strong></div>
+              <div>Status: <strong>${invoice.status}</strong></div>
+            </div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px;">
+            <thead>
+              <tr>
+                <th style="text-align: left; border-bottom: 1px solid #e5e7eb; padding: 8px 4px;">Description</th>
+                <th style="text-align: right; border-bottom: 1px solid #e5e7eb; padding: 8px 4px;">Amount (৳)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px 4px; border-bottom: 1px solid #e5e7eb;">Dental treatment & procedures</td>
+                <td style="padding: 8px 4px; text-align: right; border-bottom: 1px solid #e5e7eb;">${invoice.total.toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
+            <div style="min-width: 220px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: #6b7280;">Total</span>
+                <span>৳${invoice.total.toFixed(2)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: #6b7280;">Paid</span>
+                <span>৳${invoice.paid.toFixed(2)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                <span style="color: #6b7280;">Due</span>
+                <span>৳${invoice.due.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 32px; font-size: 12px; color: #6b7280; text-align: center;">
+            Thank you for visiting BaigDentPro Clinic.
+          </p>
         </div>
         <script>
           window.onload = function () {
