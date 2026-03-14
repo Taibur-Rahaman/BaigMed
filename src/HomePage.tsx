@@ -137,6 +137,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
     }
   };
 
+  const handleChoosePlan = (planId: string, price: number) => {
+    const params = new URLSearchParams({
+      plan: planId,
+      price: String(price),
+      currency: 'BDT',
+      billing: 'monthly',
+    });
+    window.location.href = `/payment?${params.toString()}`;
+  };
+
   const getCategoryIcon = (category: string) => {
     const icons: Record<string, string> = {
       TOOTHBRUSH: '🪥', TOOTHPASTE: '🦷', MOUTHWASH: '🧴', DENTAL_FLOSS: '🧵',
@@ -421,114 +431,108 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
       <section id="pricing" className="neo-cta">
         <div className="neo-cta-content neo-pricing">
           <div className="neo-pricing-header">
-            <p className="neo-pricing-badge-title">Save up to 85% • Limited-time launch pricing</p>
-            <h2 className="neo-cta-title">Simple pricing for every clinic</h2>
+            <p className="neo-pricing-badge-title">Monthly subscription • Cancel anytime</p>
+            <h2 className="neo-cta-title">Choose the right plan for your clinic</h2>
             <p className="neo-cta-subtitle">
-              Start small and scale as your practice grows. All plans include secure hosting, backups, and priority support.
+              All plans include secure cloud backup, prescription printing, and patient records. Upgrade only when you need more power.
             </p>
           </div>
 
           <div className="neo-pricing-grid">
-            {/* Starter / Premium */}
+            {/* Platinum */}
             <div className="neo-pricing-card">
               <div className="neo-pricing-card-header">
-                <h3 className="neo-pricing-name">Premium</h3>
-                <p className="neo-pricing-desc">Everything you need to get started</p>
-                <div className="neo-pricing-discount-pill">85% off</div>
+                <h3 className="neo-pricing-name">Platinum</h3>
+                <p className="neo-pricing-desc">Best for individual dentists or small clinics</p>
+                <div className="neo-pricing-discount-pill">Up to 2 chairs</div>
               </div>
               <div className="neo-pricing-price-block">
-                <div className="neo-pricing-price-line">
-                  <span className="neo-pricing-price-old">$12.99</span>
-                </div>
                 <div className="neo-pricing-price-main">
-                  <span className="neo-pricing-price-value">$1.99</span>
-                  <span className="neo-pricing-price-period">/mo</span>
+                  <span className="neo-pricing-price-value">৳700</span>
+                  <span className="neo-pricing-price-period">/month</span>
                 </div>
-                <p className="neo-pricing-extra">+ 2 mo. free</p>
                 <p className="neo-pricing-small">
-                  Get 48 months for $95.52 (regular price $623.52).<br />
-                  Renews at $10.99/mo.
+                  Billed monthly in BDT. Ideal for a single branch clinic getting started with digital records.
                 </p>
               </div>
-              <button className="neo-btn neo-btn-outline neo-btn-block">Choose plan</button>
+              <button
+                className="neo-btn neo-btn-outline neo-btn-block"
+                onClick={() => handleChoosePlan('platinum', 700)}
+              >
+                Choose Platinum
+              </button>
               <ul className="neo-pricing-features">
-                <li><i className="fa-solid fa-check"></i>Create up to 3 websites</li>
-                <li><i className="fa-solid fa-minus"></i>No managed Node.js web apps</li>
-                <li><i className="fa-solid fa-check"></i>20 GB of SSD storage</li>
-                <li><i className="fa-solid fa-check"></i>2 mailboxes per website – free for 1 year</li>
-                <li className="neo-pricing-features-label">Premium benefits:</li>
-                <li><i className="fa-solid fa-check"></i>Free domain for 1 year</li>
-                <li><i className="fa-solid fa-check"></i>Free SSL & daily backups</li>
-                <li><i className="fa-solid fa-check"></i>Automated WordPress updates</li>
+                <li><i className="fa-solid fa-check"></i>Up to 2 chairs / doctors</li>
+                <li><i className="fa-solid fa-check"></i>Unlimited patients & prescriptions</li>
+                <li><i className="fa-solid fa-check"></i>Digital prescription with PDF export</li>
+                <li><i className="fa-solid fa-check"></i>Basic appointment scheduling</li>
+                <li><i className="fa-solid fa-check"></i>Standard email / WhatsApp reminders</li>
+                <li><i className="fa-solid fa-check"></i>Basic reports (daily & monthly)</li>
               </ul>
             </div>
 
-            {/* Business - Most popular */}
+            {/* Premium - Most popular */}
             <div className="neo-pricing-card neo-pricing-card-featured">
               <div className="neo-pricing-most-popular">Most popular</div>
               <div className="neo-pricing-card-header">
-                <h3 className="neo-pricing-name">Business</h3>
-                <p className="neo-pricing-desc">More tools and power for growth</p>
-                <div className="neo-pricing-discount-pill">84% off</div>
+                <h3 className="neo-pricing-name">Premium</h3>
+                <p className="neo-pricing-desc">For growing clinics with multiple doctors</p>
+                <div className="neo-pricing-discount-pill">Up to 5 chairs</div>
               </div>
               <div className="neo-pricing-price-block">
-                <div className="neo-pricing-price-line">
-                  <span className="neo-pricing-price-old">$18.99</span>
-                </div>
                 <div className="neo-pricing-price-main">
-                  <span className="neo-pricing-price-value">$2.99</span>
-                  <span className="neo-pricing-price-period">/mo</span>
+                  <span className="neo-pricing-price-value">৳1,000</span>
+                  <span className="neo-pricing-price-period">/month</span>
                 </div>
-                <p className="neo-pricing-extra">+ 2 mo. free</p>
                 <p className="neo-pricing-small">
-                  Get 48 months for $143.52 (regular price $911.52).<br />
-                  Renews at $16.99/mo.
+                  Billed monthly in BDT. Perfect for busy clinics that need advanced automation and controls.
                 </p>
               </div>
-              <button className="neo-btn neo-btn-primary neo-btn-block">Choose plan</button>
+              <button
+                className="neo-btn neo-btn-primary neo-btn-block"
+                onClick={() => handleChoosePlan('premium', 1000)}
+              >
+                Choose Premium
+              </button>
               <ul className="neo-pricing-features">
-                <li><i className="fa-solid fa-check"></i>Create up to 50 websites</li>
-                <li><i className="fa-solid fa-check"></i>5 managed Node.js web apps</li>
-                <li><i className="fa-solid fa-check"></i>50 GB of fastest NVMe storage</li>
-                <li><i className="fa-solid fa-check"></i>5 mailboxes per website – free for 1 year</li>
-                <li className="neo-pricing-features-label">Everything in Premium, plus:</li>
-                <li><i className="fa-solid fa-check"></i>Daily on‑demand backups</li>
-                <li><i className="fa-solid fa-check"></i>AI agent for WordPress (free)</li>
-                <li><i className="fa-solid fa-check"></i>Maximum website speed with free CDN</li>
+                <li><i className="fa-solid fa-check"></i>Everything in Platinum</li>
+                <li><i className="fa-solid fa-check"></i>Up to 5 chairs / doctors</li>
+                <li><i className="fa-solid fa-check"></i>Advanced appointment calendar & waitlist</li>
+                <li><i className="fa-solid fa-check"></i>Smart recall & follow‑up reminders</li>
+                <li><i className="fa-solid fa-check"></i>Income & expense analytics dashboard</li>
+                <li><i className="fa-solid fa-check"></i>Priority support (Bangladesh time)</li>
               </ul>
             </div>
 
-            {/* Cloud Startup */}
+            {/* Luxury */}
             <div className="neo-pricing-card">
               <div className="neo-pricing-card-header">
-                <h3 className="neo-pricing-name">Cloud Startup</h3>
-                <p className="neo-pricing-desc">20x more power with cloud hosting</p>
-                <div className="neo-pricing-discount-pill">75% off</div>
+                <h3 className="neo-pricing-name">Luxury</h3>
+                <p className="neo-pricing-desc">For premium clinics and multi-branch setups</p>
+                <div className="neo-pricing-discount-pill">Multi‑branch</div>
               </div>
               <div className="neo-pricing-price-block">
-                <div className="neo-pricing-price-line">
-                  <span className="neo-pricing-price-old">$27.99</span>
-                </div>
                 <div className="neo-pricing-price-main">
-                  <span className="neo-pricing-price-value">$6.99</span>
-                  <span className="neo-pricing-price-period">/mo</span>
+                  <span className="neo-pricing-price-value">৳1,500</span>
+                  <span className="neo-pricing-price-period">/month</span>
                 </div>
-                <p className="neo-pricing-extra">+ 2 mo. free</p>
                 <p className="neo-pricing-small">
-                  Get 48 months for $335.52 (regular price $1,343.52).<br />
-                  Renews at $25.99/mo.
+                  Billed monthly in BDT. Designed for high-volume clinics that need deep reporting and controls.
                 </p>
               </div>
-              <button className="neo-btn neo-btn-outline neo-btn-block">Choose plan</button>
+              <button
+                className="neo-btn neo-btn-outline neo-btn-block"
+                onClick={() => handleChoosePlan('luxury', 1500)}
+              >
+                Choose Luxury
+              </button>
               <ul className="neo-pricing-features">
-                <li><i className="fa-solid fa-check"></i>Create up to 100 websites</li>
-                <li><i className="fa-solid fa-check"></i>10 managed Node.js web apps</li>
-                <li><i className="fa-solid fa-check"></i>100 GB of fastest NVMe storage</li>
-                <li><i className="fa-solid fa-check"></i>10 mailboxes per website – free for 1 year</li>
-                <li className="neo-pricing-features-label">Everything in Business, plus:</li>
-                <li><i className="fa-solid fa-check"></i>Priority expert support 24/7</li>
-                <li><i className="fa-solid fa-check"></i>Extra control with dedicated IP</li>
-                <li><i className="fa-solid fa-check"></i>High‑performance resources for busy sites</li>
+                <li><i className="fa-solid fa-check"></i>Everything in Premium</li>
+                <li><i className="fa-solid fa-check"></i>Multi‑branch / multi‑location support</li>
+                <li><i className="fa-solid fa-check"></i>Role-based access & audit logs</li>
+                <li><i className="fa-solid fa-check"></i>Advanced financial and chair‑utilization reports</li>
+                <li><i className="fa-solid fa-check"></i>Custom branding & white‑label options</li>
+                <li><i className="fa-solid fa-check"></i>Dedicated account manager</li>
               </ul>
             </div>
           </div>
