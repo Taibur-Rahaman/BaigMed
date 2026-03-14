@@ -363,6 +363,20 @@ class ApiClient {
 
     treatmentStats: () => this.request<any[]>('/dashboard/treatment-stats'),
   };
+
+  admin = {
+    users: (params?: { search?: string; role?: string; page?: number; limit?: number }) => {
+      const query = new URLSearchParams();
+      if (params?.search) query.set('search', params.search);
+      if (params?.role) query.set('role', params.role);
+      if (params?.page) query.set('page', String(params.page));
+      if (params?.limit) query.set('limit', String(params.limit));
+      return this.request<{ users: any[]; total: number }>(`/admin/users?${query}`);
+    },
+
+    updateUser: (id: string, data: { role?: string; clinicName?: string; phone?: string }) =>
+      this.request<any>(`/admin/users/${id}`, { method: 'PUT', body: data }),
+  };
 }
 
 export const api = new ApiClient();

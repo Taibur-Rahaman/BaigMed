@@ -12,6 +12,7 @@ import labRoutes from './routes/lab.js';
 import shopRoutes from './routes/shop.js';
 import communicationRoutes from './routes/communication.js';
 import dashboardRoutes from './routes/dashboard.js';
+import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use('/api/lab', labRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/communication', communicationRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err);

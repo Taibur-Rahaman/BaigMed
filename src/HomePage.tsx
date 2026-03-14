@@ -164,7 +164,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
             <a href="#hero" className="neo-nav-link">Home</a>
             <a href="#shop" className="neo-nav-link">Shop</a>
             <a href="#features" className="neo-nav-link">Features</a>
-            <a href="#contact" className="neo-nav-link">Contact</a>
+            <a href="#pricing" className="neo-nav-link">Pricing</a>
           </nav>
           <div className="neo-header-actions">
             <button className="neo-cart-btn" onClick={() => setShowCart(true)}>
@@ -417,19 +417,121 @@ export const HomePage: React.FC<HomePageProps> = ({ onLoginClick }) => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section id="contact" className="neo-cta">
-        <div className="neo-cta-content">
-          <h2 className="neo-cta-title">
-            Ready to Transform Your Practice?
-          </h2>
-          <p className="neo-cta-subtitle">
-            Join hundreds of dental clinics already using BaigDentPro
-          </p>
-          <button className="neo-btn neo-btn-primary neo-btn-lg neo-btn-glow" onClick={onLoginClick}>
-            <i className="fa-solid fa-rocket"></i>
-            <span>Start Free Trial</span>
-          </button>
+      {/* Pricing Section */}
+      <section id="pricing" className="neo-cta">
+        <div className="neo-cta-content neo-pricing">
+          <div className="neo-pricing-header">
+            <p className="neo-pricing-badge-title">Save up to 85% • Limited-time launch pricing</p>
+            <h2 className="neo-cta-title">Simple pricing for every clinic</h2>
+            <p className="neo-cta-subtitle">
+              Start small and scale as your practice grows. All plans include secure hosting, backups, and priority support.
+            </p>
+          </div>
+
+          <div className="neo-pricing-grid">
+            {/* Starter / Premium */}
+            <div className="neo-pricing-card">
+              <div className="neo-pricing-card-header">
+                <h3 className="neo-pricing-name">Premium</h3>
+                <p className="neo-pricing-desc">Everything you need to get started</p>
+                <div className="neo-pricing-discount-pill">85% off</div>
+              </div>
+              <div className="neo-pricing-price-block">
+                <div className="neo-pricing-price-line">
+                  <span className="neo-pricing-price-old">$12.99</span>
+                </div>
+                <div className="neo-pricing-price-main">
+                  <span className="neo-pricing-price-value">$1.99</span>
+                  <span className="neo-pricing-price-period">/mo</span>
+                </div>
+                <p className="neo-pricing-extra">+ 2 mo. free</p>
+                <p className="neo-pricing-small">
+                  Get 48 months for $95.52 (regular price $623.52).<br />
+                  Renews at $10.99/mo.
+                </p>
+              </div>
+              <button className="neo-btn neo-btn-outline neo-btn-block">Choose plan</button>
+              <ul className="neo-pricing-features">
+                <li><i className="fa-solid fa-check"></i>Create up to 3 websites</li>
+                <li><i className="fa-solid fa-minus"></i>No managed Node.js web apps</li>
+                <li><i className="fa-solid fa-check"></i>20 GB of SSD storage</li>
+                <li><i className="fa-solid fa-check"></i>2 mailboxes per website – free for 1 year</li>
+                <li className="neo-pricing-features-label">Premium benefits:</li>
+                <li><i className="fa-solid fa-check"></i>Free domain for 1 year</li>
+                <li><i className="fa-solid fa-check"></i>Free SSL & daily backups</li>
+                <li><i className="fa-solid fa-check"></i>Automated WordPress updates</li>
+              </ul>
+            </div>
+
+            {/* Business - Most popular */}
+            <div className="neo-pricing-card neo-pricing-card-featured">
+              <div className="neo-pricing-most-popular">Most popular</div>
+              <div className="neo-pricing-card-header">
+                <h3 className="neo-pricing-name">Business</h3>
+                <p className="neo-pricing-desc">More tools and power for growth</p>
+                <div className="neo-pricing-discount-pill">84% off</div>
+              </div>
+              <div className="neo-pricing-price-block">
+                <div className="neo-pricing-price-line">
+                  <span className="neo-pricing-price-old">$18.99</span>
+                </div>
+                <div className="neo-pricing-price-main">
+                  <span className="neo-pricing-price-value">$2.99</span>
+                  <span className="neo-pricing-price-period">/mo</span>
+                </div>
+                <p className="neo-pricing-extra">+ 2 mo. free</p>
+                <p className="neo-pricing-small">
+                  Get 48 months for $143.52 (regular price $911.52).<br />
+                  Renews at $16.99/mo.
+                </p>
+              </div>
+              <button className="neo-btn neo-btn-primary neo-btn-block">Choose plan</button>
+              <ul className="neo-pricing-features">
+                <li><i className="fa-solid fa-check"></i>Create up to 50 websites</li>
+                <li><i className="fa-solid fa-check"></i>5 managed Node.js web apps</li>
+                <li><i className="fa-solid fa-check"></i>50 GB of fastest NVMe storage</li>
+                <li><i className="fa-solid fa-check"></i>5 mailboxes per website – free for 1 year</li>
+                <li className="neo-pricing-features-label">Everything in Premium, plus:</li>
+                <li><i className="fa-solid fa-check"></i>Daily on‑demand backups</li>
+                <li><i className="fa-solid fa-check"></i>AI agent for WordPress (free)</li>
+                <li><i className="fa-solid fa-check"></i>Maximum website speed with free CDN</li>
+              </ul>
+            </div>
+
+            {/* Cloud Startup */}
+            <div className="neo-pricing-card">
+              <div className="neo-pricing-card-header">
+                <h3 className="neo-pricing-name">Cloud Startup</h3>
+                <p className="neo-pricing-desc">20x more power with cloud hosting</p>
+                <div className="neo-pricing-discount-pill">75% off</div>
+              </div>
+              <div className="neo-pricing-price-block">
+                <div className="neo-pricing-price-line">
+                  <span className="neo-pricing-price-old">$27.99</span>
+                </div>
+                <div className="neo-pricing-price-main">
+                  <span className="neo-pricing-price-value">$6.99</span>
+                  <span className="neo-pricing-price-period">/mo</span>
+                </div>
+                <p className="neo-pricing-extra">+ 2 mo. free</p>
+                <p className="neo-pricing-small">
+                  Get 48 months for $335.52 (regular price $1,343.52).<br />
+                  Renews at $25.99/mo.
+                </p>
+              </div>
+              <button className="neo-btn neo-btn-outline neo-btn-block">Choose plan</button>
+              <ul className="neo-pricing-features">
+                <li><i className="fa-solid fa-check"></i>Create up to 100 websites</li>
+                <li><i className="fa-solid fa-check"></i>10 managed Node.js web apps</li>
+                <li><i className="fa-solid fa-check"></i>100 GB of fastest NVMe storage</li>
+                <li><i className="fa-solid fa-check"></i>10 mailboxes per website – free for 1 year</li>
+                <li className="neo-pricing-features-label">Everything in Business, plus:</li>
+                <li><i className="fa-solid fa-check"></i>Priority expert support 24/7</li>
+                <li><i className="fa-solid fa-check"></i>Extra control with dedicated IP</li>
+                <li><i className="fa-solid fa-check"></i>High‑performance resources for busy sites</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 

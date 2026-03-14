@@ -1116,10 +1116,8 @@ export const DashboardPage: React.FC<Props> = ({ onLogout, userName = 'Doctor' }
                 </div>
               </div>
               
-              {/* Teeth chart from forms – above the interactive chart */}
+              {/* Teeth chart visual references above the interactive chart */}
               <div className="dental-chart-visual teeth-chart-above">
-                <p className="dental-chart-visual-label">Patient&apos;s Treatment Record – Dental Chart (Universal 1–32)</p>
-                <img src="/patient-treatment-record.png" alt="Patient Treatment Record – Dental Chart" className="dental-chart-image primary" />
                 <p className="dental-chart-visual-label">Tooth Numbering System (Front View / Side View)</p>
                 <img src="/tooth-numbering-views.png" alt="Tooth Numbering System – Dentists Use" className="dental-chart-image secondary" />
                 <img src="/dental-chart.png" alt="Dental Chart" className="dental-chart-image tertiary" />
