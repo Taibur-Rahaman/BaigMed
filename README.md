@@ -1,6 +1,8 @@
-# BaigDentPro
+# BaigMed
 
-Professional dental clinic management – prescription panel, patient records, and treatment planning (React + Vite).
+Professional clinic management platform — prescription panel, patient records, appointments, billing, and treatment planning (React + Vite + Node.js + PostgreSQL).
+
+> BaigMed shares the BaigDentPro codebase and is maintained as the medical/clinic management variant in this repository.
 
 ## Setup
 
@@ -65,8 +67,8 @@ Open the URL from Vite (e.g. `http://localhost:5173`). Data is stored in the bro
 
 ## Deploy on Vercel
 
-1. Push this repo to GitHub: [Taibur-Rahaman/BaigDentPro](https://github.com/Taibur-Rahaman/BaigDentPro)
-2. In [Vercel](https://vercel.com), **Add New Project** → Import **Taibur-Rahaman/BaigDentPro**
+1. Push this repo to GitHub: [Taibur-Rahaman/BaigMed](https://github.com/Taibur-Rahaman/BaigMed)
+2. In [Vercel](https://vercel.com), **Add New Project** → Import **Taibur-Rahaman/BaigMed**
 3. Leave build settings as default (Vite is auto-detected)
 4. Deploy
 
@@ -74,7 +76,7 @@ The repo includes `vercel.json` for SPA routing. Vercel hosts **frontend only**;
 
 ## Production on Hostinger (or any Node + PostgreSQL host)
 
-BaigDentPro is a **Vite/React SPA** plus a **Node (Express) API** and **PostgreSQL**. Hostinger **VPS or cloud Node** plans can run the full stack; static-only hosting is **frontend only** unless you point `VITE_API_URL` at a separate API URL.
+BaigMed is a **Vite/React SPA** plus a **Node (Express) API** and **PostgreSQL**. Hostinger **VPS or cloud Node** plans can run the full stack; static-only hosting is **frontend only** unless you point `VITE_API_URL` at a separate API URL.
 
 ### One service (recommended on VPS)
 
@@ -112,6 +114,10 @@ BaigDentPro is a **Vite/React SPA** plus a **Node (Express) API** and **PostgreS
 - [ ] Use PostgreSQL with TLS; backups for the database.
 - [ ] Apply schema changes on deploy (`npx prisma db push` or `migrate deploy` if you use migrations).
 - [ ] Smoke-test `/api/health` and login after deploy.
+
+## Author
+
+**Md Taibur Rahaman** — [GitHub](https://github.com/Taibur-Rahaman)
 
 ## License
 
